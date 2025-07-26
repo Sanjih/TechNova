@@ -1,0 +1,53 @@
+/* css/style.css */
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3, h4 { font-family: 'Orbitron', sans-serif; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #0077ff 0%, #a2ff00 100%);
+}
+:root {
+  --bg: #f8f9fc;
+  --text: #0f172a;
+  --card-bg: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card-bg: #1e293b;
+  --header-bg: rgba(15, 23, 42, 0.95);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s ease;
+}
+
+header {
+  background: var(--header-bg) !important;
+}
+
+.bg-white, .tutorial-card, .blog-card {
+  background: var(--card-bg) !important;
+}

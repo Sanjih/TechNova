@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TechNova | L'avenir commence ici</title>
+  <meta name="description" content="Apprenez la technologie et l'innovation – avec suivi de progression et compte utilisateur.">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuration Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            'fluorescent': '#a2ff00',
+            'bleu': '#0077ff',
+            'noir': '#0f172a',
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Lien vers ton CSS personnalisé -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="theme-color" content="#0077ff">
+</head>
+<body class="bg-gray-50 text-noir">
+
+  <!-- Modals -->
+  <div id="authModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold">Connexion</h3>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+      </div>
+      <div class="space-y-5">
+        <input type="email" id="loginEmail" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="password" id="loginPassword" placeholder="Mot de passe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <button onclick="login()" class="w-full py-3 bg-bleu text-white rounded-lg font-semibold hover:bg-blue-600 transition">Se connecter</button>
+        <p class="text-center text-sm text-gray-500">Pas encore inscrit ? <a href="#" onclick="showRegister()" class="text-bleu hover:underline">S'inscrire</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="registerModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold">Inscription</h3>
+        <button onclick="closeRegister()" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+      </div>
+      <div class="space-y-5">
+        <input type="text" id="regName" placeholder="Nom complet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="email" id="regEmail" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="password" id="regPassword" placeholder="Mot de passe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <button onclick="register()" class="w-full py-3 bg-fluorescent text-noir font-semibold rounded-lg hover:bg-green-300 transition">S'inscrire</button>
+        <p class="text-center text-sm text-gray-500"><a href="#" onclick="showLogin()" class="text-bleu hover:underline">Déjà un compte ? Se connecter</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="fixed w-full bg-white/95 backdrop-blur-md z-50 shadow-sm">
+    <button id="themeToggle" class="ml-4 text-sm text-gray-500">🌙</button>
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-noir">
+        Tech<span class="text-fluorescent">Nova</span>
+      </a>
+
+      <div id="userMenu" class="hidden flex items-center space-x-4">
+        <div class="text-sm text-gray-600">
+          <span id="userName">Utilisateur</span>
+          <div class="text-xs">Niveau <span id="userLevel">1</span></div>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-bleu text-white flex items-center justify-center font-bold">
+          <span id="userInitial">U</span>
+        </div>
+        <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500">Déconnexion</button>
+      </div>
+
+      <button id="authBtn" class="md:hidden block text-sm text-bleu" onclick="openModal()">Connexion</button>
+      <nav id="navLinks" class="hidden md:flex space-x-8">
+        <a href="#home" class="font-medium group">Accueil</a>
+        <a href="#about" class="font-medium group">À propos</a>
+        <a href="#tutorials" class="font-medium group">Tutoriels</a>
+        <a href="#blog" class="font-medium group">Blog</a>
+        <a href="#contact" class="font-medium group">Contact</a>
+        <button onclick="openModal()" id="navAuthBtn" class="font-medium text-bleu">Connexion</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="pt-40 pb-20 text-center bg-gradient-to-br from-white to-blue-50">
+    <div class="container mx-auto px-6">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+        L’<span class="text-fluorescent">Innovation</span> commence ici
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+        Découvrez les dernières avancées technologiques, du Web3 à l’IA, en passant par la robotique et la réalité augmentée. Apprenez, créez, transformez.
+      </p>
+      <button onclick="openModalIfGuest(() => window.location='#tutorials')" class="btn-fluo px-8 py-4 rounded-full font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-xl">
+        Explorer les tutoriels
+      </button>
+    </div>
+  </section>
+
+  <!-- À Propos -->
+  <section id="about" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="lg:w-1/2">
+          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Technologie et innovation" class="rounded-2xl shadow-lg" />
+        </div>
+        <div class="lg:w-1/2">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-bleu">Pourquoi la tech change tout</h2>
+          <p class="text-gray-600 mb-4">Chaque jour, de nouvelles technologies redéfinissent la manière dont nous vivons, travaillons et interagissons.</p>
+          <p class="text-gray-600 mb-6">Nos tutoriels sont conçus pour être clairs, progressifs et accessibles à tous.</p>
+          <button onclick="openModalIfGuest(() => window.location='#tutorials')" class="btn px-7 py-3 bg-bleu text-white rounded-full font-semibold transition hover:shadow-lg">
+            Voir les tutoriels
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tutoriels -->
+  <section id="tutorials" class="py-20 bg-gradient-to-br from-blue-50 to-pink-50">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Nos Tutoriels Tech</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Des modules interactifs pour comprendre et maîtriser les technologies de demain.</p>
+
+      <div class="relative slider-container">
+        <button class="slider-btn prev absolute top-1/2 -left-4 -mt-8 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center text-bleu hover:bg-bleu hover:text-white transition">‹</button>
+        <div class="slider flex overflow-hidden gap-6 transition-transform duration-500">
+          <div class="tutorial-card flex-shrink-0 w-80 bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition">
+            <div class="card-img h-44 bg-gradient-to-br from-bleu to-blue-600 flex items-center justify-center text-6xl text-white">🚀</div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Introduction au Web3</h3>
+              <p class="text-gray-600 mb-4">Blockchain, NFTs, DAOs – découvrez l’internet décentralisé.</p>
+              <div class="mb-3">
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div id="progress-web3" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-web3">0%</span></small>
+              </div>
+              <button onclick="completeTutorial('web3')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white">
+                Marquer comme terminé
+              </button>
+            </div>
+          </div>
+          <div class="tutorial-card flex-shrink-0 w-80 bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition">
+            <div class="card-img h-44 bg-gradient-to-br from-purple-500 to-bleu flex items-center justify-center text-6xl text-white">🧠</div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">IA Générative</h3>
+              <p class="text-gray-600 mb-4">Créez du texte, des images et de la musique avec l’IA.</p>
+              <div class="mb-3">
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div id="progress-ia" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-ia">0%</span></small>
+              </div>
+              <button onclick="completeTutorial('ia')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white">
+                Marquer comme terminé
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="slider-btn next absolute top-1/2 -right-4 -mt-8 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center text-bleu hover:bg-bleu hover:text-white transition">›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Actualités & Articles</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Restez à la pointe de l’innovation avec nos analyses et guides.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition">
+          <div class="h-48 bg-bleu flex items-center justify-center text-5xl text-white">⚡</div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Les 5 tendances tech de 2025</h3>
+            <p class="text-gray-600 mb-4">De la robotique au cloud quantique, ce qui va tout changer.</p>
+            <a href="#" class="text-bleu font-semibold hover:underline">Lire l'article →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-20 bg-noir text-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Prêt à innover ?</h2>
+      <p class="text-center text-gray-300 max-w-2xl mx-auto mb-12">Contactez-nous pour des partenariats ou rejoindre notre communauté.</p>
+      <form class="max-w-2xl mx-auto bg-black/20 p-8 rounded-2xl backdrop-blur-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div><input type="text" placeholder="Nom" class="w-full px-4 py-3 bg-white/20 border-none rounded-lg"/></div>
+          <div><input type="email" placeholder="Email" class="w-full px-4 py-3 bg-white/20 border-none rounded-lg"/></div>
+        </div>
+        <div class="mb-6"><textarea placeholder="Message" rows="5" class="w-full px-4 py-3 bg-white/20 border-none rounded-lg"></textarea></div>
+        <button type="submit" class="w-full py-4 bg-fluorescent text-noir font-semibold rounded-full">Envoyer</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-noir text-white py-16">
+    <div class="container mx-auto px-6">
+      <div class="text-center text-gray-400">&copy; 2025 TechNova. Tous droits réservés.</div>
+    </div>
+  </footer>
+
+  <!-- Lien vers ton JS -->
+  <script src="js/app.js"></script>
+</body>
+</html>
