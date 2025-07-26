@@ -1,16 +1,23 @@
-// js/app.js
+// js/app.js - TechNova Application
 let currentUser = null;
 
+// === Initialisation ===
 function init() {
   loadUser();
+  setupTheme();
+  updateUserUI();
   setupEventListeners();
+  hideLoader();
 }
 
+// === Chargement utilisateur ===
 function loadUser() {
   const saved = localStorage.getItem('techNovaUser');
   if (saved) {
     currentUser = JSON.parse(saved);
-    updateUserUI();
+  } else {
+    // Initialiser un utilisateur vide
+    currentUser = null;
   }
 }
 
@@ -18,27 +25,87 @@ function saveUser() {
   localStorage.setItem('techNovaUser', JSON.stringify(currentUser));
 }
 
+// === Thème clair/sombre ===
+function setupTheme() {
+  const themeToggle = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('theme') || 'light';
+
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  themeToggle.addEventListener('click', () => {
+    const current = localStorage.getItem('theme') || 'light';
+    const newTheme = current === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  });
+}
+
+// === Mise à jour de l'interface utilisateur ===
+function updateUserUI() {
+  const userMenu = document.getElementById('userMenu');
+  const authBtn = document.getElementById('authBtn');
+  const navAuthBtn = document.getElementById('navAuthBtn');
+
+  if (currentUser) {
+    const firstName = currentUser.name.split(' ')[0];
+    document.getElementById('userName').textContent = firstName;
+    document.getElementById('userLevel').textContent = currentUser.level;
+    document.getElementById('userInitial').textContent = firstName[0].toUpperCase();
+
+    userMenu.classList.remove('hidden');
+    authBtn?.classList.add('hidden');
+    navAuthBtn?.classList.add('hidden');
+
+    updateProgressBars();
+  } else {
+    userMenu.classList.add('hidden');
+    authBtn?.classList.remove('hidden');
+    navAuthBtn?.classList.remove('hidden');
+  }
+}
+
+// === Barres de progression ===
+function updateProgressBars() {
+  for (const [key, progress] of Object.entries(currentUser.tutorials)) {
+    const bar = document.getElementById(`progress-${key}`);
+    const text = document.getElementById(`progress-text-${key}`);
+    if (bar) bar.style.width = progress + '%';
+    if (text) text.textContent = progress + '%';
+  }
+}
+
+// === Connexion & Inscription ===
 function register() {
   const name = document.getElementById('regName').value;
   const email = document.getElementById('regEmail').value;
   const password = document.getElementById('regPassword').value;
 
-  if (!name || !email || !password) return alert("Tous les champs sont requis");
+  if (!name || !email || !password) {
+    alert("Tous les champs sont requis");
+    return;
+  }
 
+  // Vérifier si l'email existe déjà
+  const existing = localStorage.getItem('techNovaUser');
+  if (existing) {
+    const user = JSON.parse(existing);
+    if (user.email === email) {
+      alert("Un compte avec cet email existe déjà.");
+      return;
+    }
+  }
+
+  // Créer un nouvel utilisateur
   currentUser = {
     name,
     email,
     password,
     level: 1,
     xp: 0,
-    tutorials: {}
+    tutorials: { web3: 0, ia: 0 }
   };
-
-  const tutorials = document.querySelectorAll('[id^="progress-"]');
-  tutorials.forEach(tut => {
-    const id = tut.id.replace('progress-', '');
-    currentUser.tutorials[id] = 0;
-  });
 
   saveUser();
   closeRegister();
@@ -69,72 +136,27 @@ function logout() {
   currentUser = null;
   localStorage.removeItem('techNovaUser');
   updateUserUI();
+  window.location.href = 'index.html';
 }
 
-function updateUserUI() {
-  const userMenu = document.getElementById('userMenu');
-  const authBtn = document.getElementById('authBtn');
-  const navAuthBtn = document.getElementById('navAuthBtn');
-
-  if (currentUser) {
-    document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
-    document.getElementById('userInitial').textContent = currentUser.name[0].toUpperCase();
-    document.getElementById('userLevel').textContent = currentUser.level;
-
-    userMenu.innerHTML = `
-      <a href="profile.html" class="text-sm text-gray-600 hover:underline">
-        <span>${currentUser.name.split(' ')[0]}</span>
-        <div class="text-xs">Niveau <span>${currentUser.level}</span></div>
-      </a>
-      <div class="w-9 h-9 rounded-full bg-bleu text-white flex items-center justify-center font-bold">
-        ${currentUser.name[0].toUpperCase()}
-      </div>
-      <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500">Déconnexion</button>
-    `;
-    authBtn.classList.add('hidden');
-    navAuthBtn.classList.add('hidden');
-    updateProgressBars();
-  } else {
-    userMenu.classList.add('hidden');
-    authBtn.classList.remove('hidden');
-    navAuthBtn.classList.remove('hidden');
-  }
+// === Modals ===
+function openModal() {
+  document.getElementById('authModal').classList.remove('hidden');
 }
 
-function updateProgressBars() {
-  for (const [key, progress] of Object.entries(currentUser.tutorials)) {
-    const bar = document.getElementById(`progress-${key}`);
-    const text = document.getElementById(`progress-text-${key}`);
-    if (bar) bar.style.width = progress + '%';
-    if (text) text.textContent = progress + '%';
-  }
+function closeModal() {
+  document.getElementById('authModal').classList.add('hidden');
 }
 
-function completeTutorial(id) {
-  if (!currentUser) return openModal();
-
-  if (currentUser.tutorials[id] < 100) {
-    currentUser.tutorials[id] = 100;
-    currentUser.xp += 50;
-
-    if (currentUser.xp >= 100 * currentUser.level) {
-      currentUser.level++;
-      alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
-    }
-
-    saveUser();
-    updateProgressBars();
-    alert("Tutoriel terminé ! +50 XP");
-  }
-}
-
-function openModal() { document.getElementById('authModal').classList.remove('hidden'); }
-function closeModal() { document.getElementById('authModal').classList.add('hidden'); }
 function showRegister() {
   closeModal();
   document.getElementById('registerModal').classList.remove('hidden');
 }
-function closeRegister() { document.getElementById('registerModal').classList.add('hidden'); }
+
+function closeRegister() {
+  document.getElementById('registerModal').classList.add('hidden');
+}
+
 function showLogin() {
   closeRegister();
   openModal();
@@ -149,48 +171,30 @@ function openModalIfGuest(callback) {
   }
 }
 
-function setupEventListeners() {
-  const slider = document.querySelector('.slider');
-  const prevBtn = document.querySelector('.prev');
-  const nextBtn = document.querySelector('.next');
-  const cardWidth = 320 + 24;
-  let index = 0;
+// === Compléter un tutoriel + certificat PDF ===
+function completeTutorial(id) {
+  if (!currentUser) return openModal();
 
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (index < 1) {
-        index++;
-        slider.style.transform = `translateX(-${index * cardWidth}px)`;
-      }
-    });
-  }
+  if (currentUser.tutorials[id] < 100) {
+    currentUser.tutorials[id] = 100;
+    currentUser.xp += 50;
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (index > 0) {
-        index--;
-        slider.style.transform = `translateX(-${index * cardWidth}px)`;
-      }
-    });
+    // Level up
+    if (currentUser.xp >= 100 * currentUser.level) {
+      currentUser.level++;
+      alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
+    }
+
+    saveUser();
+    updateProgressBars();
+
+    // Générer certificat
+    const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
+    generateCertificate(moduleName);
+    alert(`Tutoriel "${moduleName}" terminé ! +50 XP\nUn certificat va être téléchargé.`);
   }
 }
 
-window.onload = init;
-// Thème
-const themeToggle = document.getElementById('themeToggle');
-const savedTheme = localStorage.getItem('theme') || 'light';
-
-document.documentElement.setAttribute('data-theme', savedTheme);
-themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-
-themeToggle.addEventListener('click', () => {
-  const current = localStorage.getItem('theme') || 'light';
-  const newTheme = current === 'light' ? 'dark' : 'light';
-  
-  localStorage.setItem('theme', newTheme);
-  document.documentElement.setAttribute('data-theme', newTheme);
-  themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-});
 function generateCertificate(moduleName) {
   const certHTML = `
     <div style="
@@ -223,28 +227,52 @@ function generateCertificate(moduleName) {
 
   html2pdf().from(certHTML).set(opt).save();
 }
-function completeTutorial(id) {
-  if (!currentUser) return openModal();
 
-  if (currentUser.tutorials[id] < 100) {
-    currentUser.tutorials[id] = 100;
-    currentUser.xp += 50;
+// === Slider Tutoriels ===
+function setupEventListeners() {
+  const slider = document.querySelector('.slider');
+  const prevBtn = document.querySelector('.prev');
+  const nextBtn = document.querySelector('.next');
+  const cardWidth = 320 + 24; // w-80 + gap-6
+  let index = 0;
 
-    // Level up
-    if (currentUser.xp >= 100 * currentUser.level) {
-      currentUser.level++;
-      alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
-    }
+  if (nextBtn && slider) {
+    nextBtn.addEventListener('click', () => {
+      if (index < 1) {
+        index++;
+        slider.style.transform = `translateX(-${index * cardWidth}px)`;
+      }
+    });
+  }
 
-    saveUser();
-    updateProgressBars();
-
-    // Générer certificat
-    const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
-    generateCertificate(moduleName);
-    alert(`Tutoriel "${moduleName}" terminé ! +50 XP\nUn certificat va être téléchargé.`);
+  if (prevBtn && slider) {
+    prevBtn.addEventListener('click', () => {
+      if (index > 0) {
+        index--;
+        slider.style.transform = `translateX(-${index * cardWidth}px)`;
+      }
+    });
   }
 }
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
+
+// === Loader d'entrée ===
+function hideLoader() {
+  setTimeout(() => {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = 'none';
+    }
+  }, 1200);
 }
+
+// === Service Worker pour PWA ===
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered: ', reg))
+      .catch(err => console.log('SW registration failed: ', err));
+  });
+}
+
+// === Lancer l'app ===
+document.addEventListener('DOMContentLoaded', init);

@@ -5,36 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TechNova | L'avenir commence ici</title>
   <meta name="description" content="Apprenez la technologie et l'innovation – avec suivi de progression et compte utilisateur.">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Configuration Tailwind -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Orbitron', 'sans-serif'],
-          },
-          colors: {
-            'fluorescent': '#a2ff00',
-            'bleu': '#0077ff',
-            'noir': '#0f172a',
-          },
-        }
-      }
-    }
-  </script>
-
-  <!-- Lien vers ton CSS personnalisé -->
+  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="assets/icon-192.png">
-<meta name="theme-color" content="#0077ff">
+  <meta name="theme-color" content="#0077ff">
 </head>
-<body class="bg-gray-50 text-noir">
+<body class="bg-gray-50 text-noir min-h-screen">
+
+  <!-- Loader -->
+  <div id="loader" class="fixed inset-0 bg-noir flex items-center justify-center z-50">
+    <div class="text-center">
+      <div class="text-fluorescent text-6xl mb-4">🚀</div>
+      <div class="text-white text-2xl font-bold">Tech<span class="text-fluorescent">Nova</span></div>
+      <div class="text-gray-400 text-sm mt-2">Chargement...</div>
+    </div>
+  </div>
 
   <!-- Modals -->
   <div id="authModal" class="modal hidden">
@@ -70,17 +59,16 @@
 
   <!-- Header -->
   <header class="fixed w-full bg-white/95 backdrop-blur-md z-50 shadow-sm">
-    <button id="themeToggle" class="ml-4 text-sm text-gray-500">🌙</button>
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-noir">
         Tech<span class="text-fluorescent">Nova</span>
       </a>
 
       <div id="userMenu" class="hidden flex items-center space-x-4">
-        <div class="text-sm text-gray-600">
+        <a href="profile.html" class="text-sm text-gray-600 hover:underline">
           <span id="userName">Utilisateur</span>
           <div class="text-xs">Niveau <span id="userLevel">1</span></div>
-        </div>
+        </a>
         <div class="w-9 h-9 rounded-full bg-bleu text-white flex items-center justify-center font-bold">
           <span id="userInitial">U</span>
         </div>
@@ -94,7 +82,8 @@
         <a href="#tutorials" class="font-medium group">Tutoriels</a>
         <a href="#blog" class="font-medium group">Blog</a>
         <a href="#contact" class="font-medium group">Contact</a>
-        <button onclick="openModal()" id="navAuthBtn" class="font-medium text-bleu">Connexion</button>
+        <button id="navAuthBtn" class="font-medium text-bleu" onclick="openModal()">Connexion</button>
+        <button id="themeToggle" class="ml-4 text-sm text-gray-500">🌙</button>
       </nav>
     </div>
   </header>
@@ -216,12 +205,13 @@
 
   <!-- Footer -->
   <footer class="bg-noir text-white py-16">
-    <div class="container mx-auto px-6">
-      <div class="text-center text-gray-400">&copy; 2025 TechNova. Tous droits réservés.</div>
+    <div class="container mx-auto px-6 text-center text-gray-400">
+      &copy; 2025 TechNova. Tous droits réservés.
     </div>
   </footer>
 
-  <!-- Lien vers ton JS -->
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

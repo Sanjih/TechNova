@@ -4,48 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil - TechNova</title>
-  <meta name="description" content="Votre profil d'apprenant TechNova : progression, niveaux et badges">
-
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Configuration Tailwind -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Orbitron', 'sans-serif'],
-          },
-          colors: {
-            'fluorescent': '#a2ff00',
-            'bleu': '#0077ff',
-            'noir': '#0f172a',
-          },
-        }
-      }
-    }
-  </script>
-
-  <!-- Style personnalisé -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0077ff">
 </head>
 <body class="bg-gray-50 text-noir min-h-screen">
 
-  <!-- Header -->
   <header class="fixed w-full bg-white/95 backdrop-blur-md z-50 shadow-sm">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold text-noir">
         Tech<span class="text-fluorescent">Nova</span>
       </a>
 
-      <!-- Menu utilisateur -->
       <div id="userMenu" class="flex items-center space-x-4">
-        <span class="text-sm text-gray-600">
+        <a href="profile.html" class="text-sm text-gray-600 hover:underline">
           <span id="userName">Utilisateur</span>
-          <span class="block">Niveau <span id="userLevel">1</span></span>
-        </span>
+          <div class="text-xs">Niveau <span id="userLevel">1</span></div>
+        </a>
         <div class="w-9 h-9 rounded-full bg-bleu text-white flex items-center justify-center font-bold">
           <span id="userInitial">U</span>
         </div>
@@ -54,11 +30,8 @@
     </div>
   </header>
 
-  <!-- Profil -->
   <main class="pt-24 pb-12">
     <div class="container mx-auto px-6">
-
-      <!-- Bannière utilisateur -->
       <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex flex-col md:flex-row items-center gap-6">
         <div class="w-24 h-24 rounded-full bg-bleu flex items-center justify-center text-3xl font-bold text-white" id="profileAvatar">U</div>
         <div class="text-center md:text-left">
@@ -71,120 +44,45 @@
         </div>
       </div>
 
-      <!-- Progression -->
       <section class="bg-white rounded-2xl shadow-lg p-8 mb-8">
         <h2 class="text-2xl font-bold mb-6 text-bleu">Progression des tutoriels</h2>
         <div class="space-y-6" id="progressList">
-          <!-- Généré dynamiquement -->
           <p class="text-gray-500">Chargement de votre progression...</p>
         </div>
       </section>
 
-      <!-- Badges -->
       <section class="bg-white rounded-2xl shadow-lg p-8 mb-8">
         <h2 class="text-2xl font-bold mb-6 text-bleu">Vos Badges</h2>
-        <div class="flex flex-wrap gap-4" id="badgesContainer">
-          <!-- Généré dynamiquement -->
-        </div>
+        <div class="flex flex-wrap gap-4" id="badgesContainer"></div>
         <p class="text-gray-500 mt-4" id="noBadges">Vous n'avez pas encore débloqué de badges.</p>
+      </div>
       </section>
 
-      <!-- Activités récentes -->
       <section class="bg-white rounded-2xl shadow-lg p-8">
         <h2 class="text-2xl font-bold mb-6 text-bleu">Activités récentes</h2>
         <ul id="activityLog" class="space-y-3">
           <li class="text-gray-600">Aucune activité pour le moment.</li>
         </ul>
       </section>
-
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-noir text-white py-8">
     <div class="container mx-auto px-6 text-center text-gray-400">
       &copy; 2025 TechNova. Tous droits réservés.
     </div>
   </footer>
 
-  <!-- Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // Charger le profil dès que la page est prête
     document.addEventListener('DOMContentLoaded', () => {
       if (!currentUser) {
-        // Si non connecté, rediriger vers accueil
         window.location.href = 'index.html';
       } else {
         displayProfile();
       }
     });
-
-    function displayProfile() {
-      document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
-      document.getElementById('userLevel').textContent = currentUser.level;
-      document.getElementById('userInitial').textContent = currentUser.name[0].toUpperCase();
-
-      document.getElementById('profileName').textContent = currentUser.name;
-      document.getElementById('profileLevel').textContent = currentUser.level;
-      document.getElementById('profileXP').textContent = currentUser.xp;
-      document.getElementById('profileAvatar').textContent = currentUser.name[0].toUpperCase();
-
-      // Progression
-      const progressList = document.getElementById('progressList');
-      progressList.innerHTML = '';
-      for (const [module, progress] of Object.entries(currentUser.tutorials)) {
-        const title = module === 'web3' ? 'Introduction au Web3' : 
-                     module === 'ia' ? 'IA Générative' : 
-                     module.charAt(0).toUpperCase() + module.slice(1);
-        progressList.innerHTML += `
-          <div>
-            <div class="flex justify-between text-sm">
-              <strong>${title}</strong>
-              <span>${progress}%</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-              <div class="progress-bar h-2 rounded-full" style="width: ${progress}%"></div>
-            </div>
-          </div>
-        `;
-      }
-
-      // Badges
-      const badges = [];
-      if (currentUser.tutorials.web3 === 100) badges.push('🚀 Web3 Pioneer');
-      if (currentUser.tutorials.ia === 100) badges.push('🧠 IA Master');
-      if (currentUser.level >= 2) badges.push('🏆 Expert en Tech');
-
-      const badgesContainer = document.getElementById('badgesContainer');
-      const noBadges = document.getElementById('noBadges');
-      if (badges.length > 0) {
-        noBadges.classList.add('hidden');
-        badgesContainer.innerHTML = badges.map(badge => 
-          `<span class="bg-gradient-to-r from-bleu to-fluorescent text-white px-4 py-2 rounded-full text-sm font-semibold">${badge}</span>`
-        ).join('');
-      } else {
-        noBadges.classList.remove('hidden');
-        badgesContainer.innerHTML = '';
-      }
-
-      // Activités
-      const activityLog = document.getElementById('activityLog');
-      activityLog.innerHTML = '';
-
-      if (currentUser.tutorials.web3 === 100) {
-        activityLog.innerHTML += `<li class="text-gray-600">✅ A terminé le tutoriel <strong>Introduction au Web3</strong></li>`;
-      }
-      if (currentUser.tutorials.ia === 100) {
-        activityLog.innerHTML += `<li class="text-gray-600">✅ A terminé le tutoriel <strong>IA Générative</strong></li>`;
-      }
-      if (currentUser.level > 1) {
-        activityLog.innerHTML += `<li class="text-gray-600">🎉 A atteint le <strong>Niveau ${currentUser.level}</strong></li>`;
-      }
-      if (activityLog.innerHTML === '') {
-        activityLog.innerHTML = `<li class="text-gray-600">Aucune activité pour le moment.</li>`;
-      }
-    }
   </script>
 </body>
 </html>
