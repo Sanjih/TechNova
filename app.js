@@ -1,7 +1,9 @@
 // js/app.js - TechNova Application
 let currentUser = null;
 
-// === Initialisation ===
+// === Initialisation au chargement ===
+document.addEventListener('DOMContentLoaded', init);
+
 function init() {
   loadUser();
   setupTheme();
@@ -10,22 +12,27 @@ function init() {
   hideLoader();
 }
 
-// === Chargement utilisateur ===
+// === Charger l'utilisateur depuis localStorage ===
 function loadUser() {
   const saved = localStorage.getItem('techNovaUser');
   if (saved) {
-    currentUser = JSON.parse(saved);
-  } else {
-    // Initialiser un utilisateur vide
-    currentUser = null;
+    try {
+      currentUser = JSON.parse(saved);
+    } catch (e) {
+      console.error('Erreur de parsing utilisateur', e);
+      currentUser = null;
+    }
   }
 }
 
+// === Sauvegarder l'utilisateur ===
 function saveUser() {
-  localStorage.setItem('techNovaUser', JSON.stringify(currentUser));
+  if (currentUser) {
+    localStorage.setItem('techNovaUser', JSON.stringify(currentUser));
+  }
 }
 
-// === Thème clair/sombre ===
+// === Gestion du thème clair/sombre ===
 function setupTheme() {
   const themeToggle = document.getElementById('themeToggle');
   const savedTheme = localStorage.getItem('theme') || 'light';
@@ -33,7 +40,7 @@ function setupTheme() {
   document.documentElement.setAttribute('data-theme', savedTheme);
   themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
-  themeToggle.addEventListener('click', () => {
+  themeToggle?.addEventListener('click', () => {
     const current = localStorage.getItem('theme') || 'light';
     const newTheme = current === 'light' ? 'dark' : 'light';
     localStorage.setItem('theme', newTheme);
@@ -42,7 +49,7 @@ function setupTheme() {
   });
 }
 
-// === Mise à jour de l'interface utilisateur ===
+// === Mettre à jour l'interface utilisateur (menu, profil) ===
 function updateUserUI() {
   const userMenu = document.getElementById('userMenu');
   const authBtn = document.getElementById('authBtn');
@@ -66,9 +73,9 @@ function updateUserUI() {
   }
 }
 
-// === Barres de progression ===
+// === Mettre à jour les barres de progression ===
 function updateProgressBars() {
-  for (const [key, progress] of Object.entries(currentUser.tutorials)) {
+  for (const [key, progress] of Object.entries(currentUser.tutorials || {})) {
     const bar = document.getElementById(`progress-${key}`);
     const text = document.getElementById(`progress-text-${key}`);
     if (bar) bar.style.width = progress + '%';
@@ -76,10 +83,10 @@ function updateProgressBars() {
   }
 }
 
-// === Connexion & Inscription ===
+// === Inscription d'un nouvel utilisateur ===
 function register() {
-  const name = document.getElementById('regName').value;
-  const email = document.getElementById('regEmail').value;
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
 
   if (!name || !email || !password) {
@@ -101,7 +108,7 @@ function register() {
   currentUser = {
     name,
     email,
-    password,
+    password, // En production, utilise un hash
     level: 1,
     xp: 0,
     tutorials: { web3: 0, ia: 0 }
@@ -113,8 +120,9 @@ function register() {
   alert(`Bienvenue, ${name} !`);
 }
 
+// === Connexion utilisateur ===
 function login() {
-  const email = document.getElementById('loginEmail').value;
+  const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
 
   const saved = localStorage.getItem('techNovaUser');
@@ -125,13 +133,17 @@ function login() {
       saveUser();
       closeModal();
       updateUserUI();
-      if (window.afterLogin) window.afterLogin();
+      if (window.afterLogin) {
+        window.afterLogin();
+        window.afterLogin = null;
+      }
       return;
     }
   }
   alert("Email ou mot de passe incorrect");
 }
 
+// === Déconnexion ===
 function logout() {
   currentUser = null;
   localStorage.removeItem('techNovaUser');
@@ -139,7 +151,7 @@ function logout() {
   window.location.href = 'index.html';
 }
 
-// === Modals ===
+// === Gestion des modales (connexion/inscription) ===
 function openModal() {
   document.getElementById('authModal').classList.remove('hidden');
 }
@@ -162,6 +174,7 @@ function showLogin() {
   openModal();
 }
 
+// === Ouvrir la modale si non connecté (avant action) ===
 function openModalIfGuest(callback) {
   if (!currentUser) {
     openModal();
@@ -171,30 +184,36 @@ function openModalIfGuest(callback) {
   }
 }
 
-// === Compléter un tutoriel + certificat PDF ===
+// === Compléter un tutoriel + générer certificat PDF ===
 function completeTutorial(id) {
   if (!currentUser) return openModal();
+
+  if (!currentUser.tutorials[id]) {
+    currentUser.tutorials[id] = 0;
+  }
 
   if (currentUser.tutorials[id] < 100) {
     currentUser.tutorials[id] = 100;
     currentUser.xp += 50;
 
-    // Level up
-    if (currentUser.xp >= 100 * currentUser.level) {
-      currentUser.level++;
+    // Niveau supérieur ?
+    const newLevel = Math.floor(currentUser.xp / 100) + 1;
+    if (newLevel > currentUser.level) {
+      currentUser.level = newLevel;
       alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
     }
 
     saveUser();
     updateProgressBars();
 
-    // Générer certificat
+    // Générer le certificat
     const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
     generateCertificate(moduleName);
     alert(`Tutoriel "${moduleName}" terminé ! +50 XP\nUn certificat va être téléchargé.`);
   }
 }
 
+// === Générer un certificat PDF (via html2pdf.js) ===
 function generateCertificate(moduleName) {
   const certHTML = `
     <div style="
@@ -219,16 +238,17 @@ function generateCertificate(moduleName) {
 
   const opt = {
     margin: 1,
-    filename: `certificat-${moduleName}.pdf`,
+    filename: `certificat-${moduleName.replace(' ', '-')}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
   };
 
+  // Génère le PDF
   html2pdf().from(certHTML).set(opt).save();
 }
 
-// === Slider Tutoriels ===
+// === Slider des tutoriels (défilement) ===
 function setupEventListeners() {
   const slider = document.querySelector('.slider');
   const prevBtn = document.querySelector('.prev');
@@ -255,17 +275,17 @@ function setupEventListeners() {
   }
 }
 
-// === Loader d'entrée ===
+// === Cacher le loader d'entrée ===
 function hideLoader() {
-  setTimeout(() => {
-    const loader = document.getElementById('loader');
-    if (loader) {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    setTimeout(() => {
       loader.style.display = 'none';
-    }
-  }, 1200);
+    }, 1200);
+  }
 }
 
-// === Service Worker pour PWA ===
+// === Enregistrer le Service Worker (PWA) ===
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
@@ -273,6 +293,3 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW registration failed: ', err));
   });
 }
-
-// === Lancer l'app ===
-document.addEventListener('DOMContentLoaded', init);
