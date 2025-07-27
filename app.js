@@ -71,7 +71,6 @@ function updateUserUI() {
     authBtn?.classList.add('hidden');
     navAuthBtn?.classList.add('hidden');
 
-    // Mettre à jour les barres de progression
     updateProgressBars();
   } else {
     userMenu.classList.add('hidden');
@@ -254,7 +253,6 @@ function generateCertificate(moduleName) {
     jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
   };
 
-  // Génère le PDF (safe, no eval)
   html2pdf().from(certHTML).set(opt).save();
 }
 
