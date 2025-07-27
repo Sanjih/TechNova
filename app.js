@@ -8,6 +8,7 @@ function init() {
   loadUser();
   setupTheme();
   updateUserUI();
+  setupEventListeners();
 }
 
 function loadUser() {
@@ -30,6 +31,7 @@ function saveUser() {
 function setupTheme() {
   const themeToggle = document.getElementById('themeToggle');
   const savedTheme = localStorage.getItem('theme') || 'light';
+
   document.documentElement.setAttribute('data-theme', savedTheme);
   themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
@@ -52,9 +54,11 @@ function updateUserUI() {
     document.getElementById('userName').textContent = firstName;
     document.getElementById('userLevel').textContent = currentUser.level;
     document.getElementById('userInitial').textContent = firstName[0].toUpperCase();
+
     userMenu.classList.remove('hidden');
     authBtn?.classList.add('hidden');
     navAuthBtn?.classList.add('hidden');
+
     updateProgressBars();
   } else {
     userMenu.classList.add('hidden');
@@ -78,15 +82,27 @@ function register() {
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
 
-  if (!name || !email || !password) return alert("Tous les champs sont requis");
+  if (!name || !email || !password) {
+    alert("Tous les champs sont requis");
+    return;
+  }
 
   const existing = localStorage.getItem('techNovaUser');
-  if (existing && JSON.parse(existing).email === email) {
-    return alert("Un compte avec cet email existe déjà.");
+  if (existing) {
+    const user = JSON.parse(existing);
+    if (user.email === email) {
+      alert("Un compte avec cet email existe déjà.");
+      return;
+    }
   }
 
   currentUser = {
-    name, email, password, level: 1, xp: 0, tutorials: { web3: 0, ia: 0 }
+    name,
+    email,
+    password,
+    level: 1,
+    xp: 0,
+    tutorials: { web3: 0, ia: 0 }
   };
 
   saveUser();
@@ -155,42 +171,99 @@ function openModalIfGuest(callback) {
 
 function completeTutorial(id) {
   if (!currentUser) return openModal();
+
   if (!currentUser.tutorials[id]) currentUser.tutorials[id] = 0;
   if (currentUser.tutorials[id] < 100) {
     currentUser.tutorials[id] = 100;
     currentUser.xp += 50;
+
     const newLevel = Math.floor(currentUser.xp / 100) + 1;
     if (newLevel > currentUser.level) {
       currentUser.level = newLevel;
       alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
     }
+
     saveUser();
     updateProgressBars();
-    generateCertificate(id === 'web3' ? 'Web3' : 'IA Générative');
-    alert(`Tutoriel terminé ! +50 XP`);
+
+    const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
+    generateCertificate(moduleName);
+    alert(`Tutoriel "${moduleName}" terminé ! +50 XP\nUn certificat va être téléchargé.`);
   }
 }
 
 function generateCertificate(moduleName) {
   const certHTML = `
-    <div style="font-family: 'Orbitron'; text-align: center; padding: 50px; background: #000; color: white; border: 15px solid #a2ff00; border-radius: 20px;">
-      <h1 style="color: #a2ff00;">Certificat de Réussite</h1>
-      <h2>${currentUser.name}</h2>
-      <h3 style="color: #0077ff;">${moduleName}</h3>
+    <div style="
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: linear-gradient(135deg, #000000, #1e293b);
+      color: white;
+      border: 15px solid #a2ff00;
+      border-radius: 20px;
+      max-width: 800px;
+      margin: 20px auto;
+    ">
+      <h1 style="font-size: 3rem; color: #a2ff00;">Certificat de Réussite</h1>
+      <p style="font-size: 1.2rem; margin: 20px 0;">Délivré à</p>
+      <h2 style="font-size: 2.5rem; margin: 10px 0;">${currentUser.name}</h2>
+      <p style="font-size: 1.3rem;">Pour avoir terminé le tutoriel :</p>
+      <h3 style="font-size: 2rem; color: #0077ff; margin: 20px 0;">${moduleName}</h3>
+      <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">TechNova • ${new Date().toLocaleDateString()}</p>
     </div>
   `;
-  html2pdf().from(certHTML).save(`certificat-${moduleName}.pdf`);
+
+  const opt = {
+    margin: 1,
+    filename: `certificat-${moduleName.replace(' ', '-')}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
+  };
+
+  html2pdf().from(certHTML).set(opt).save();
+}
+
+function setupEventListeners() {
+  const slider = document.querySelector('.slider');
+  const prevBtn = document.querySelector('.prev');
+  const nextBtn = document.querySelector('.next');
+  const cardWidth = 320 + 24;
+  let index = 0;
+
+  if (nextBtn && slider) {
+    nextBtn.addEventListener('click', () => {
+      if (index < 1) {
+        index++;
+        slider.style.transform = `translateX(-${index * cardWidth}px)`;
+      }
+    });
+  }
+
+  if (prevBtn && slider) {
+    prevBtn.addEventListener('click', () => {
+      if (index > 0) {
+        index--;
+        slider.style.transform = `translateX(-${index * cardWidth}px)`;
+      }
+    });
+  }
 }
 
 function hideLoader() {
   setTimeout(() => {
     const loader = document.getElementById('loader');
-    if (loader) loader.style.display = 'none';
+    if (loader) {
+      loader.style.display = 'none';
+    }
   }, 1200);
 }
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered: ', reg))
+      .catch(err => console.log('SW registration failed: ', err));
   });
 }
