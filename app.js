@@ -5,11 +5,17 @@ let currentUser = null;
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  loadUser();
-  setupTheme();
-  updateUserUI();
-  setupEventListeners();
+  // Cacher le loader
   hideLoader();
+
+  // Charger l'utilisateur
+  loadUser();
+
+  // Appliquer le thème
+  setupTheme();
+
+  // Mettre à jour l'interface
+  updateUserUI();
 }
 
 // === Charger l'utilisateur depuis localStorage ===
@@ -49,7 +55,7 @@ function setupTheme() {
   });
 }
 
-// === Mettre à jour l'interface utilisateur (menu, profil) ===
+// === Mettre à jour l'interface utilisateur ===
 function updateUserUI() {
   const userMenu = document.getElementById('userMenu');
   const authBtn = document.getElementById('authBtn');
@@ -65,6 +71,7 @@ function updateUserUI() {
     authBtn?.classList.add('hidden');
     navAuthBtn?.classList.add('hidden');
 
+    // Mettre à jour les barres de progression
     updateProgressBars();
   } else {
     userMenu.classList.add('hidden');
@@ -75,15 +82,17 @@ function updateUserUI() {
 
 // === Mettre à jour les barres de progression ===
 function updateProgressBars() {
-  for (const [key, progress] of Object.entries(currentUser.tutorials || {})) {
+  const tutorials = ['web3', 'ia'];
+  tutorials.forEach(key => {
+    const progress = currentUser?.tutorials?.[key] || 0;
     const bar = document.getElementById(`progress-${key}`);
     const text = document.getElementById(`progress-text-${key}`);
-    if (bar) bar.style.width = progress + '%';
-    if (text) text.textContent = progress + '%';
-  }
+    if (bar) bar.style.width = `${progress}%`;
+    if (text) text.textContent = `${progress}%`;
+  });
 }
 
-// === Inscription d'un nouvel utilisateur ===
+// === Inscription ===
 function register() {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
@@ -104,11 +113,11 @@ function register() {
     }
   }
 
-  // Créer un nouvel utilisateur
+  // Créer utilisateur
   currentUser = {
     name,
     email,
-    password, // En production, utilise un hash
+    password,
     level: 1,
     xp: 0,
     tutorials: { web3: 0, ia: 0 }
@@ -120,7 +129,7 @@ function register() {
   alert(`Bienvenue, ${name} !`);
 }
 
-// === Connexion utilisateur ===
+// === Connexion ===
 function login() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -151,9 +160,10 @@ function logout() {
   window.location.href = 'index.html';
 }
 
-// === Gestion des modales (connexion/inscription) ===
+// === Gestion des modales ===
 function openModal() {
   document.getElementById('authModal').classList.remove('hidden');
+  document.getElementById('registerModal').classList.add('hidden');
 }
 
 function closeModal() {
@@ -174,7 +184,7 @@ function showLogin() {
   openModal();
 }
 
-// === Ouvrir la modale si non connecté (avant action) ===
+// === Ouvrir la modale si non connecté ===
 function openModalIfGuest(callback) {
   if (!currentUser) {
     openModal();
@@ -184,7 +194,7 @@ function openModalIfGuest(callback) {
   }
 }
 
-// === Compléter un tutoriel + générer certificat PDF ===
+// === Compléter un tutoriel + certificat PDF ===
 function completeTutorial(id) {
   if (!currentUser) return openModal();
 
@@ -206,14 +216,14 @@ function completeTutorial(id) {
     saveUser();
     updateProgressBars();
 
-    // Générer le certificat
+    // Générer certificat
     const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
     generateCertificate(moduleName);
     alert(`Tutoriel "${moduleName}" terminé ! +50 XP\nUn certificat va être téléchargé.`);
   }
 }
 
-// === Générer un certificat PDF (via html2pdf.js) ===
+// === Générer un certificat PDF (sans eval) ===
 function generateCertificate(moduleName) {
   const certHTML = `
     <div style="
@@ -244,35 +254,8 @@ function generateCertificate(moduleName) {
     jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
   };
 
-  // Génère le PDF
+  // Génère le PDF (safe, no eval)
   html2pdf().from(certHTML).set(opt).save();
-}
-
-// === Slider des tutoriels (défilement) ===
-function setupEventListeners() {
-  const slider = document.querySelector('.slider');
-  const prevBtn = document.querySelector('.prev');
-  const nextBtn = document.querySelector('.next');
-  const cardWidth = 320 + 24; // w-80 + gap-6
-  let index = 0;
-
-  if (nextBtn && slider) {
-    nextBtn.addEventListener('click', () => {
-      if (index < 1) {
-        index++;
-        slider.style.transform = `translateX(-${index * cardWidth}px)`;
-      }
-    });
-  }
-
-  if (prevBtn && slider) {
-    prevBtn.addEventListener('click', () => {
-      if (index > 0) {
-        index--;
-        slider.style.transform = `translateX(-${index * cardWidth}px)`;
-      }
-    });
-  }
 }
 
 // === Cacher le loader d'entrée ===
@@ -285,7 +268,7 @@ function hideLoader() {
   }
 }
 
-// === Enregistrer le Service Worker (PWA) ===
+// === Service Worker (PWA) ===
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
