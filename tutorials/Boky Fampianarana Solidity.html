@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Fampianarana Solidity - Fivoarana Smart Contract amin'ny 2024-2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-block { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 1rem; overflow-x: auto; }
+        .highlight { background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%); padding: 2px 6px; border-radius: 4px; }
+        .chapter-header { border-left: 4px solid #3b82f6; padding-left: 1rem; margin: 2rem 0 1rem 0; }
+        .info-box { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #93c5fd; }
+        .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; }
+        .success-box { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 1px solid #10b981; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 leading-relaxed">
+
+<!-- Header -->
+<div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 class="text-4xl font-bold mb-4">
+            <i class="fas fa-code mr-3"></i>
+              Solidity
+        </h1>
+        <p class="text-xl opacity-90 mb-2">Fivoarana Smart Contract amin'ny 2024-2025</p>
+        <p class="text-sm opacity-75">Fanoroana feno ho an'ny mpianatra vao manomboka</p>
+    </div>
+</div>
+
+<!-- Table of Contents -->
+<div class="max-w-4xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">
+            <i class="fas fa-list mr-2 text-blue-600"></i>Votoatin'ny Boky
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4">
+            <div>
+                <ul class="space-y-2">
+                    <li><a href="#introduction" class="text-blue-600 hover:underline">1. Fampidirana ny "Solidity"</a></li>
+                    <li><a href="#setup" class="text-blue-600 hover:underline">2. Fanamboarana sy Fitaovana</a></li>
+                    <li><a href="#basics" class="text-blue-600 hover:underline">3. Fototry ny "Data Types"</a></li>
+                    <li><a href="#advanced" class="text-blue-600 hover:underline">4. Rafitra Advanced</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="space-y-2">
+                    <li><a href="#functions" class="text-blue-600 hover:underline">5. Functions sy Modifiers</a></li>
+                    <li><a href="#dao-project" class="text-blue-600 hover:underline">6. Tetikasa "DAO"</a></li>
+                    <li><a href="#security" class="text-blue-600 hover:underline">7. Fiarovana sy Fiasa tsara</a></li>
+                    <li><a href="#updates-2024" class="text-blue-600 hover:underline">8. Vaovao 2024-2025</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <section id="introduction" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">1. Fampidirana ny "Solidity"</h2>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Inona no atao hoe "Solidity"?</h3>
+            <p class="mb-4">
+                "Solidity" dia fiteny fandaharana(Language de programation) natao manokana ho an'ny fanoratana <span class="highlight">"smart contracts"</span> eo amin'ny "Ethereum blockchain". Izy io dia fiteny fandaharana mahery vaika izay ahafahantsika mamorona rindranasa tsy miankina sy azo antoka eo amin'ny tranokala blockchain.
+            </p>
+            
+            <div class="info-box rounded-lg p-4 mb-4">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">Smart Contract dia inona?</h4>
+                        <p class="text-sm">
+                            "Smart contract" dia programa fifanarahana izay miasa ho azy eo amin'ny "blockchain". Tsy mila mpanelanelana izy io satria ny fehezan-dalàna dia voasoratra ao anatin'ny "code" ihany.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="font-semibold mb-3">Inona no ahafahana mampiasa ny Solidity?</h4>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="border rounded-lg p-4">
+                    <h5 class="font-semibold text-blue-600 mb-2"><i class="fas fa-coins mr-2"></i>DeFi Applications</h5>
+                    <p class="text-sm">Fampindramam-bola, fampindranana, sy fitantanana vola tsy misy mpanelanelana</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h5 class="font-semibold text-green-600 mb-2"><i class="fas fa-image mr-2"></i>NFT Platforms</h5>
+                    <p class="text-sm">Famoronana sy fivarotana "NFT" (Non-Fungible Tokens)</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h5 class="font-semibold text-purple-600 mb-2"><i class="fas fa-vote-yea mr-2"></i>DAO Systems</h5>
+                    <p class="text-sm">Fikambanana tsy miankina izay fehezin'ny mpikambana</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h5 class="font-semibold text-orange-600 mb-2"><i class="fas fa-gamepad mr-2"></i>Gaming & Metaverse</h5>
+                    <p class="text-sm">Lalao "blockchain" sy "metaverse applications"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Antony tokony hianàrana Solidity amin'ny 2025 </h3>
+            <ul class="space-y-3">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                    <span><strong>Fitadiavana be dia be:</strong> Solidity developers dia ilaina be amin'izao fotoana izao noho ny fivoaran'ny blockchain technology</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                    <span><strong>Karama avo:</strong> Ny mpandalo-dalàna Solidity dia mahazo karama avo kokoa noho ny mpandalo-dalàna mahazatra</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                    <span><strong>Hoavy mampanantena:</strong> Blockchain technology dia mbola mivoatra hatrany ary misy endrik-kevitra vaovao isan-taona</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                    <span><strong>Fahafahana mamorona:</strong> Ahafahantsika mamorona rindranasa tsy mbola nisy teo aloha</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Setup -->
+    <section id="setup" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">2. Fanamboarana sy Fitaovana</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Fitaovana ilaina</h3>
+            <p class="mb-6">Alohan'ny hanombohantsika ny fanoratana "Solidity code" dia mila manomana fitaovana vitsivitsy isika:</p>
+
+            <div class="space-y-6">
+                <!-- Remix IDE -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-code text-blue-600 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-lg">Remix IDE</h4>
+                            <p class="text-sm text-gray-600">Online Solidity editor sy compiler</p>
+                        </div>
+                    </div>
+                    <p class="mb-3">
+                        Remix dia ny fitaovana tsara indrindra ho an'ny vao manomboka. Azo ampiasaina eo amin'ny navigateur fotsiny ary tsy mila installation.
+                    </p>
+                    <div class="bg-gray-100 rounded p-3">
+                        <strong>Link:</strong> <a href="https://remix.ethereum.org" class="text-blue-600 hover:underline" target="_blank">remix.ethereum.org</a>
+                    </div>
+                </div>
+
+                <!-- MetaMask -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-wallet text-orange-600 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-lg">MetaMask Wallet</h4>
+                            <p class="text-sm text-gray-600">Ethereum wallet extension</p>
+                        </div>
+                    </div>
+                    <p class="mb-3">
+                        MetaMask dia wallet izay ahafahantsika mifandray amin'ny Ethereum network ary mandefa ny smart contracts antsika.
+                    </p>
+                    <div class="bg-gray-100 rounded p-3">
+                        <strong>Installation:</strong> Midìra ao amin'ny Chrome/Firefox extension store ary mitadiava "MetaMask"
+                    </div>
+                </div>
+
+                <!-- Development Frameworks -->
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-tools text-purple-600 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-semibold text-lg">Development Frameworks (2024)</h4>
+                            <p class="text-sm text-gray-600">Foundry vs Hardhat</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-blue-50 rounded p-3">
+                            <h5 class="font-semibold text-blue-800 mb-2">Foundry</h5>
+                            <ul class="text-sm space-y-1">
+                                <li>• Haingana kokoa</li>
+                                <li>• Fitsapana amin'ny Solidity</li>
+                                <li>• Tool mahery vaika</li>
+                                <li>• Vaovao sy tsara ho an'ny 2024</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded p-3">
+                            <h5 class="font-semibold text-green-800 mb-2">Hardhat</h5>
+                            <ul class="text-sm space-y-1">
+                                <li>• Mora ampiasaina</li>
+                                <li>• Fitsapana amin'ny JavaScript</li>
+                                <li>• Plugin maro</li>
+                                <li>• Ecosystem be</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-box rounded-lg p-4">
+            <div class="flex items-start">
+                <i class="fas fa-lightbulb text-green-600 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-semibold mb-2">Torohevitra ho an'ny vao manomboka</h4>
+                    <p class="text-sm">
+                        Ho an'ny fianaranantsika aloha dia hampiasa Remix IDE isika satria tsotra sy tsy mila configuration sarotra. Rehefa mahay ny fototra isika dia afaka mifindra any amin'ny Foundry na Hardhat.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Basic Data Types -->
+    <section id="basics" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">3. Fototry ny Data Types sy State Variables</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Karazana Data Types</h3>
+            <p class="mb-6">
+                Solidity dia fiteny fandaharana statically typed, izany hoe mila manondro ny karazana data isehoantsika isaky ny mamorona variable. Ireto ny karazana fototra:
+            </p>
+
+            <div class="space-y-4">
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-blue-800">String</h4>
+                    <p class="text-sm text-gray-600 mb-2">Ho an'ny lahatsoratra</p>
+                    <div class="code-block">
+                        <code>string public myName = "Rakoto";</code>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-green-800">Boolean</h4>
+                    <p class="text-sm text-gray-600 mb-2">True na false ihany</p>
+                    <div class="code-block">
+                        <code>bool public isActive = true;</code>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h4 class="font-semibold text-purple-800">Integers</h4>
+                    <p class="text-sm text-gray-600 mb-2">Isa - misy signed (int) sy unsigned (uint)</p>
+                    <div class="code-block">
+                        <code>uint256 public age = 25;  // Isa tsy misy sonia (-)</code><br>
+                        <code>int256 public temperature = -10;  // Isa mety misy sonia</code>
+                    </div>
+                </div>
+
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <h4 class="font-semibold text-orange-800">Address</h4>
+                    <p class="text-sm text-gray-600 mb-2">Adiresy Ethereum wallet</p>
+                    <div class="code-block">
+                        <code>address public owner = 0x742b9c83e4b8d0f6E24b5B46ED2E7B21A08A4C3D;</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Ohatra fampiharana</h3>
+            <p class="mb-4">Ity misy ohatra smart contract tsotra izay mampiasa data types samihafa:</p>
+            
+            <div class="code-block mb-4">
+                <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.30;
+
+contract UserProfile {
+    // State variables - mikarakara data eo amin'ny blockchain
+    string public firstName = "Rabe";
+    string public lastName = "Andry";
+    uint256 public age = 30;
+    bool public isVerified = false;
+    address public walletAddress;
+    
+    // Constructor - miasa rehefa deploy ny contract
+    constructor() {
+        walletAddress = msg.sender; // ny olona mandefa ny contract
+    }
+    
+    // Function hanovana ny anarana
+    function updateName(string memory _firstName, string memory _lastName) public {
+        firstName = _firstName;
+        lastName = _lastName;
+    }
+    
+    // Function hanamarina ny account
+    function verifyAccount() public {
+        require(msg.sender == walletAddress, "Tsy izy ny tompony!");
+        isVerified = true;
+    }
+}</code></pre>
+            </div>
+
+            <div class="info-box rounded-lg p-4">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">Fanazavana:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>public:</strong> Variable azo jerena avy any ivelany</li>
+                            <li>• <strong>memory:</strong> Teny vaovao tamin'ny Solidity 0.5+ ho an'ny string parameters</li>
+                            <li>• <strong>msg.sender:</strong> Adiresy ny olona izay nandefa ny transaction</li>
+                            <li>• <strong>require():</strong> Fitsapana condition, raha tsy marina dia mijanona ny function</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box rounded-lg p-4">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-semibold mb-2">Fahadisoana mahazatra</h4>
+                    <p class="text-sm mb-2">
+                        Rehefa mampiasa Solidity 0.5.1+, tsy maintsy manisy <code class="bg-white px-1 rounded">memory</code> keyword amin'ny string parameters:
+                    </p>
+                    <div class="bg-red-100 border border-red-300 rounded p-2 mb-2">
+                        <code class="text-red-800">// TSY METY - Solidity 0.5+</code><br>
+                        <code class="text-red-800">function setName(string _name) public { ... }</code>
+                    </div>
+                    <div class="bg-green-100 border border-green-300 rounded p-2">
+                        <code class="text-green-800">// METY - Solidity 0.5+</code><br>
+                        <code class="text-green-800">function setName(string memory _name) public { ... }</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Data Structures -->
+    <section id="advanced" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">4. Rafitra Advanced Data</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Enums - Karazana States</h3>
+            <p class="mb-4">
+                Enum dia ahafahantsika mamaritra karazana state na status izay afaka hiova. Ohatra, ny status Order dia mety ho Pending, Confirmed, Shipped, Delivered.
+            </p>
+            
+            <div class="code-block mb-4">
+                <pre><code>contract OrderSystem {
+    // Enum famaritana ny status order
+    enum OrderStatus { 
+        Pending,    // 0
+        Confirmed,  // 1
+        Shipped,    // 2
+        Delivered   // 3
+    }
+    
+    OrderStatus public currentStatus;
+    
+    constructor() {
+        currentStatus = OrderStatus.Pending;
+    }
+    
+    function confirmOrder() public {
+        currentStatus = OrderStatus.Confirmed;
+    }
+    
+    function shipOrder() public {
+        require(currentStatus == OrderStatus.Confirmed, "Tsy mbola confirmed!");
+        currentStatus = OrderStatus.Shipped;
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Structs - Rafitra Data Custom</h3>
+            <p class="mb-4">
+                Struct dia ahafahantsika manangona data maro ho ao anatin'ny type iray. Ohatra, mila mitahiry info momba ny User dia afaka manao struct User isika.
+            </p>
+            
+            <div class="code-block mb-4">
+                <pre><code>contract UserRegistry {
+    // Struct famaritana User
+    struct User {
+        string name;
+        uint256 age;
+        string email;
+        bool isActive;
+        address walletAddress;
+    }
+    
+    // Array mitahiry User rehetra
+    User[] public users;
+    
+    // Mapping hahafahana mitady User araka ny address
+    mapping(address => User) public userByAddress;
+    
+    function addUser(
+        string memory _name, 
+        uint256 _age, 
+        string memory _email
+    ) public {
+        User memory newUser = User({
+            name: _name,
+            age: _age,
+            email: _email,
+            isActive: true,
+            walletAddress: msg.sender
+        });
+        
+        users.push(newUser);
+        userByAddress[msg.sender] = newUser;
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Arrays sy Mappings</h3>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold mb-3 text-blue-800">Arrays</h4>
+                    <p class="text-sm mb-3">Lisitra mitahiry data maromaro</p>
+                    <div class="code-block text-sm">
+                        <pre><code>// Dynamic array
+uint256[] public numbers;
+
+// Fixed size array
+uint256[5] public fixedNumbers;
+
+// String array
+string[] public names;</code></pre>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-3 text-green-800">Mappings</h4>
+                    <p class="text-sm mb-3">Key-value pairs, toy ny dictionary</p>
+                    <div class="code-block text-sm">
+                        <pre><code>// Address -> balance
+mapping(address => uint256) public balances;
+
+// String -> User
+mapping(string => User) public usersByName;</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Fampiharana: Product Registry</h3>
+            <p class="mb-4">Ity misy ohatra fampiharana mitahiry sy mifehy products:</p>
+            
+            <div class="code-block">
+                <pre><code>contract ProductRegistry {
+    struct Product {
+        uint256 id;
+        string name;
+        uint256 price;  // amin'ny wei
+        address seller;
+        bool isAvailable;
+    }
+    
+    Product[] public products;
+    mapping(uint256 => Product) public productById;
+    mapping(address => uint256[]) public productsBySeller;
+    
+    uint256 public nextProductId = 1;
+    
+    function addProduct(string memory _name, uint256 _price) public {
+        Product memory newProduct = Product({
+            id: nextProductId,
+            name: _name,
+            price: _price,
+            seller: msg.sender,
+            isAvailable: true
+        });
+        
+        products.push(newProduct);
+        productById[nextProductId] = newProduct;
+        productsBySeller[msg.sender].push(nextProductId);
+        
+        nextProductId++;
+    }
+    
+    function buyProduct(uint256 _productId) public payable {
+        Product storage product = productById[_productId];
+        
+        require(product.isAvailable, "Tsy amidy intsony!");
+        require(msg.value >= product.price, "Tsy ampy ny vola!");
+        
+        product.isAvailable = false;
+        
+        // Mandefa vola any amin'ny mpivarotra
+        payable(product.seller).transfer(product.price);
+        
+        // Mamerina ny ambiny (raha misy)
+        if (msg.value > product.price) {
+            payable(msg.sender).transfer(msg.value - product.price);
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Functions & Modifiers -->
+    <section id="functions" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">5. Functions sy Modifiers</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Function Visibility</h3>
+            <p class="mb-4">
+                Amin'ny Solidity dia misy karazana visibility efa-misoratra ho an'ny functions. Isaky ny mamorona function dia tsy maintsy manondro izay:
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-600 mb-2">public</h4>
+                    <p class="text-sm">Azo antsoina na avy aiza na avy aiza (anaty contract na avy ivelany)</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-green-600 mb-2">external</h4>
+                    <p class="text-sm">Azo antsoina avy ivelany ihany (tsy avy anaty contract)</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-orange-600 mb-2">internal</h4>
+                    <p class="text-sm">Azo ampiasaina anaty contract sy contract manaraka azy ihany</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-red-600 mb-2">private</h4>
+                    <p class="text-sm">Anaty contract iray ihany no azo ampiasaina</p>
+                </div>
+            </div>
+
+            <div class="info-box rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-blue-500 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">View sy Pure Functions</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>view:</strong> Mamaky state variables nefa tsy manova azy</li>
+                            <li>• <strong>pure:</strong> Tsy mamaky na manova state variables akory</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <pre><code>contract FunctionExamples {
+    uint256 public count = 0;
+    
+    // Public function - azo antsoina na avy aiza
+    function increment() public {
+        count++;
+    }
+    
+    // View function - mamaky ihany
+    function getCount() public view returns (uint256) {
+        return count;
+    }
+    
+    // Pure function - calculation ihany
+    function add(uint256 a, uint256 b) public pure returns (uint256) {
+        return a + b;
+    }
+    
+    // Private function - anaty contract ihany
+    function _validateInput(uint256 _input) private pure returns (bool) {
+        return _input > 0;
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Modifiers - Fitsapana Access Control</h3>
+            <p class="mb-4">
+                Modifiers dia ahafahantsika manao fitsapana mialoha ny function. Matetika ampiasaina amin'ny access control, ohatra ny "owner ihany no afaka".
+            </p>
+
+            <div class="code-block mb-4">
+                <pre><code>contract AccessControl {
+    address public owner;
+    mapping(address => bool) public admins;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+    
+    // Modifier fitsapana raha owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Tsy izy ny owner!");
+        _; // eto no hitizan'ny function content
+    }
+    
+    // Modifier fitsapana raha admin
+    modifier onlyAdmin() {
+        require(admins[msg.sender] || msg.sender == owner, "Tsy admin!");
+        _;
+    }
+    
+    // Function hamadihana owner (owner ihany no afaka)
+    function transferOwnership(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "Address tsy mety!");
+        owner = _newOwner;
+    }
+    
+    // Function hanendry admin
+    function addAdmin(address _admin) public onlyOwner {
+        admins[_admin] = true;
+    }
+    
+    // Function hanesorana admin
+    function removeAdmin(address _admin) public onlyOwner {
+        admins[_admin] = false;
+    }
+    
+    // Function izay admin ihany no afaka
+    function adminOnlyFunction() public onlyAdmin {
+        // Function content eto
+    }
+}</code></pre>
+            </div>
+
+            <div class="warning-box rounded-lg p-4">
+                <div class="flex items-start">
+                    <i class="fas fa-shield-alt text-yellow-600 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold mb-2">Security Note</h4>
+                        <p class="text-sm">
+                            Aza mandalo <code class="bg-white px-1 rounded">tx.origin</code> fa <code class="bg-white px-1 rounded">msg.sender</code> no ampiasao ho an'ny authentication. <code class="bg-white px-1 rounded">tx.origin</code> dia azo soloina amin'ny phishing attacks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Fampiharana: Voting System</h3>
+            <p class="mb-4">Ity misy ohatra voting system tsotra izay owner ihany no afaka mi-reset votes:</p>
+            
+            <div class="code-block">
+                <pre><code>contract VotingSystem {
+    address public owner;
+    string public proposal;
+    uint256 public yesVotes;
+    uint256 public noVotes;
+    bool public votingActive;
+    
+    mapping(address => bool) public hasVoted;
+    
+    constructor(string memory _proposal) {
+        owner = msg.sender;
+        proposal = _proposal;
+        votingActive = true;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Tsy izy ny owner!");
+        _;
+    }
+    
+    modifier votingIsActive() {
+        require(votingActive, "Tapitra ny voting!");
+        _;
+    }
+    
+    modifier hasNotVoted() {
+        require(!hasVoted[msg.sender], "Efa nifidy!");
+        _;
+    }
+    
+    function voteYes() public votingIsActive hasNotVoted {
+        yesVotes++;
+        hasVoted[msg.sender] = true;
+    }
+    
+    function voteNo() public votingIsActive hasNotVoted {
+        noVotes++;
+        hasVoted[msg.sender] = true;
+    }
+    
+    function endVoting() public onlyOwner {
+        votingActive = false;
+    }
+    
+    function resetVotes() public onlyOwner {
+        yesVotes = 0;
+        noVotes = 0;
+        votingActive = true;
+        
+        // Reset hasVoted mapping dia sarotra, mila liste ny voters
+        // Ohatra tsotra ihany ity
+    }
+    
+    function getResults() public view returns (uint256, uint256) {
+        return (yesVotes, noVotes);
+    }
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAO Project -->
+    <section id="dao-project" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">6. Tetikasa DAO (Decentralized Autonomous Organization)</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Inona no DAO?</h3>
+            <p class="mb-4">
+                DAO dia fikambanana izay tsy misy "lehibe" na "mpitondra" ara-bakiteny fa ny mpikambana rehetra no mandray fanapahan-kevitra miaraka. Ny fehezan-dalàna sy ny fomba fiasan'ny fikambanana dia voasoratra ao anatin'ny smart contract.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">
+                        <i class="fas fa-users mr-2"></i>Mpikambana
+                    </h4>
+                    <p class="text-sm">Ny rehetra afaka mandray anjara amin'ny fanapahan-kevitra</p>
+                </div>
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-green-800 mb-2">
+                        <i class="fas fa-vote-yea mr-2"></i>Fifidianana
+                    </h4>
+                    <p class="text-sm">Proposal rehetra dia ifidiana amin'ny fomba demokratika</p>
+                </div>
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-purple-800 mb-2">
+                        <i class="fas fa-coins mr-2"></i>Treasury
+                    </h4>
+                    <p class="text-sm">Vola iraisan'ny fikambanana izay fehezin'ny contract</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">SimpleDAO Contract</h3>
+            <p class="mb-4">Ity misy ohatra DAO tsotra izay ahafahana mamorona proposal sy mifidy:</p>
+
+            <div class="code-block">
+                <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.30;
+
+contract SimpleDAO {
+    // Enum ho an'ny status proposal
+    enum ProposalStatus { 
+        Pending,    // Mbola miandry
+        Approved,   // Nekena
+        Rejected,   // Lavina
+        Executed    // Vita
+    }
+    
+    struct Proposal {
+        uint256 id;
+        string description;
+        address proposer;
+        uint256 yesVotes;
+        uint256 noVotes;
+        ProposalStatus status;
+        uint256 deadline;
+        uint256 amount;  // vola takiana (raha misy)
+        address recipient; // izay hahazo ny vola
+    }
+    
+    address public owner;
+    uint256 public proposalCount;
+    uint256 public memberCount;
+    uint256 public constant VOTING_PERIOD = 7 days;
+    uint256 public constant MIN_VOTES_TO_PASS = 3;
+    
+    mapping(uint256 => Proposal) public proposals;
+    mapping(address => bool) public members;
+    mapping(uint256 => mapping(address => bool)) public hasVoted;
+    
+    event ProposalCreated(uint256 indexed proposalId, string description, address indexed proposer);
+    event VoteCast(uint256 indexed proposalId, address indexed voter, bool support);
+    event ProposalExecuted(uint256 indexed proposalId);
+    
+    constructor() {
+        owner = msg.sender;
+        members[msg.sender] = true;
+        memberCount = 1;
+    }
+    
+    modifier onlyMember() {
+        require(members[msg.sender], "Tsy mpikambana!");
+        _;
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Tsy owner!");
+        _;
+    }
+    
+    // Hanendry mpikambana vaovao
+    function addMember(address _newMember) public onlyOwner {
+        require(!members[_newMember], "Efa mpikambana sahady!");
+        require(_newMember != address(0), "Address tsy mety!");
+        
+        members[_newMember] = true;
+        memberCount++;
+    }
+    
+    // Hamoronana proposal
+    function createProposal(
+        string memory _description,
+        uint256 _amount,
+        address _recipient
+    ) public onlyMember {
+        proposalCount++;
+        
+        proposals[proposalCount] = Proposal({
+            id: proposalCount,
+            description: _description,
+            proposer: msg.sender,
+            yesVotes: 0,
+            noVotes: 0,
+            status: ProposalStatus.Pending,
+            deadline: block.timestamp + VOTING_PERIOD,
+            amount: _amount,
+            recipient: _recipient
+        });
+        
+        emit ProposalCreated(proposalCount, _description, msg.sender);
+    }
+    
+    // Fifidianana
+    function vote(uint256 _proposalId, bool _support) public onlyMember {
+        Proposal storage proposal = proposals[_proposalId];
+        
+        require(proposal.id != 0, "Proposal tsy misy!");
+        require(proposal.status == ProposalStatus.Pending, "Tsy azo fidiana intsony!");
+        require(block.timestamp <= proposal.deadline, "Tapitra ny deadline!");
+        require(!hasVoted[_proposalId][msg.sender], "Efa nifidy!");
+        
+        hasVoted[_proposalId][msg.sender] = true;
+        
+        if (_support) {
+            proposal.yesVotes++;
+        } else {
+            proposal.noVotes++;
+        }
+        
+        emit VoteCast(_proposalId, msg.sender, _support);
+        
+        // Jereo raha tokony hiova ny status
+        _updateProposalStatus(_proposalId);
+    }
+    
+    // Function hanavao ny status proposal
+    function _updateProposalStatus(uint256 _proposalId) internal {
+        Proposal storage proposal = proposals[_proposalId];
+        
+        uint256 totalVotes = proposal.yesVotes + proposal.noVotes;
+        
+        if (totalVotes >= MIN_VOTES_TO_PASS) {
+            if (proposal.yesVotes > proposal.noVotes) {
+                proposal.status = ProposalStatus.Approved;
+            } else {
+                proposal.status = ProposalStatus.Rejected;
+            }
+        } else if (block.timestamp > proposal.deadline) {
+            proposal.status = ProposalStatus.Rejected;
+        }
+    }
+    
+    // Hanatanterahana proposal nekena
+    function executeProposal(uint256 _proposalId) public onlyMember {
+        Proposal storage proposal = proposals[_proposalId];
+        
+        require(proposal.status == ProposalStatus.Approved, "Tsy nekena ny proposal!");
+        require(address(this).balance >= proposal.amount, "Tsy ampy ny vola!");
+        
+        proposal.status = ProposalStatus.Executed;
+        
+        if (proposal.amount > 0 && proposal.recipient != address(0)) {
+            payable(proposal.recipient).transfer(proposal.amount);
+        }
+        
+        emit ProposalExecuted(_proposalId);
+    }
+    
+    // Mandefa vola ho any amin'ny DAO
+    function contribute() public payable {
+        require(msg.value > 0, "Tsy misy vola!");
+    }
+    
+    // Jereo ny vola ananan'ny DAO
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    // Jereo info momba ny proposal
+    function getProposal(uint256 _proposalId) public view returns (
+        string memory description,
+        address proposer,
+        uint256 yesVotes,
+        uint256 noVotes,
+        ProposalStatus status,
+        uint256 deadline
+    ) {
+        Proposal storage proposal = proposals[_proposalId];
+        return (
+            proposal.description,
+            proposal.proposer,
+            proposal.yesVotes,
+            proposal.noVotes,
+            proposal.status,
+            proposal.deadline
+        );
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="success-box rounded-lg p-4">
+            <div class="flex items-start">
+                <i class="fas fa-tasks text-green-600 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-semibold mb-2">Fampiharana</h4>
+                    <p class="text-sm mb-2">Andramo amin'ny Remix:</p>
+                    <ol class="text-sm space-y-1 ml-4">
+                        <li>1. Deploy ny contract</li>
+                        <li>2. Mamorona proposal amin'ny <code class="bg-white px-1 rounded">createProposal</code></li>
+                        <li>3. Mandefa vola ho any amin'ny DAO amin'ny <code class="bg-white px-1 rounded">contribute</code></li>
+                        <li>4. Mifidy amin'ny <code class="bg-white px-1 rounded">vote</code> function</li>
+                        <li>5. Manatanteraka ny proposal nekena amin'ny <code class="bg-white px-1 rounded">executeProposal</code></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security & Best Practices -->
+    <section id="security" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">7. Fiarovana sy Best Practices</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Fahadisoana mahazatra sy fomba fiarovana</h3>
+            <p class="mb-6">
+                Smart contract development dia mila fitandremana be satria rehefa deploy dia sarotra ovaina. Ireto ny fahadisoana mahazatra sy ny fomba fisorohana azy:
+            </p>
+
+            <div class="space-y-6">
+                <!-- Reentrancy -->
+                <div class="warning-box rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800 mb-3">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>1. Reentrancy Attacks
+                    </h4>
+                    <p class="text-sm mb-3">
+                        Reentrancy dia fanafihana izay mampiasa ny fahadisoana amin'ny fandrefesana external calls. Ny manam-pahefana dia afaka miantso ny function indray mandeha alohan'ny hihitry ny transaction voalohany.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h5 class="font-semibold text-red-700 mb-2">❌ TSY METY</h5>
+                            <div class="code-block text-xs">
+                                <pre><code>function withdraw() public {
+    uint256 amount = balances[msg.sender];
+    (bool success,) = msg.sender.call{value: amount}("");
+    require(success);
+    balances[msg.sender] = 0; // LATE!
+}</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-green-700 mb-2">✅ METY</h5>
+                            <div class="code-block text-xs">
+                                <pre><code>function withdraw() public {
+    uint256 amount = balances[msg.sender];
+    balances[msg.sender] = 0; // EARLY!
+    (bool success,) = msg.sender.call{value: amount}("");
+    require(success);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integer Overflow -->
+                <div class="warning-box rounded-lg p-4">
+                    <h4 class="font-semibold text-orange-800 mb-3">
+                        <i class="fas fa-calculator mr-2"></i>2. Integer Overflow/Underflow
+                    </h4>
+                    <p class="text-sm mb-3">
+                        Alohan'ny Solidity 0.8.0 dia tsy nisy automatic checking ho an'ny overflow. Ankehitriny dia misy sahady, fa mbola tsara raha manampy fitsapana.
+                    </p>
+                    
+                    <div class="code-block text-sm">
+                        <pre><code>// Solidity 0.8+ - automatic overflow protection
+function safeAdd(uint256 a, uint256 b) public pure returns (uint256) {
+    return a + b; // Auto-revert rehefa overflow
+}
+
+// Manual checking (raha ilaina)
+function manualAdd(uint256 a, uint256 b) public pure returns (uint256) {
+    require(a + b >= a, "Overflow!");
+    return a + b;
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Access Control -->
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-800 mb-3">
+                        <i class="fas fa-lock mr-2"></i>3. Access Control tsara
+                    </h4>
+                    <p class="text-sm mb-3">
+                        Ampiasa OpenZeppelin na manao modifiers tsara ho an'ny access control. Aza miantehitra amin'ny tx.origin.
+                    </p>
+                    
+                    <div class="code-block text-sm">
+                        <pre><code>// Import OpenZeppelin
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract SecureContract is Ownable, ReentrancyGuard {
+    mapping(address => uint256) public balances;
+    
+    function withdraw() public nonReentrant {
+        uint256 amount = balances[msg.sender];
+        require(amount > 0, "Tsy misy balance!");
+        
+        balances[msg.sender] = 0;
+        (bool success,) = msg.sender.call{value: amount}("");
+        require(success, "Transfer tsy nahomby!");
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Best Practices 2024</h3>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-green-800 mb-3">✅ Tsy maintsy atao</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span>Mampiasa <strong>require()</strong> ho an'ny input validation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span>Manao <strong>modifier</strong> ho an'ny access control</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span>Mampiasa <strong>OpenZeppelin</strong> contracts</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span>Manao <strong>testing</strong> be</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span>Manao <strong>security audit</strong> alohan'ny mainnet</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-red-800 mb-3">❌ Aza atao</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                            <span>Aza mampiasa <strong>tx.origin</strong> ho an'ny auth</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                            <span>Aza mandefa vola alohan'ny manova state</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                            <span>Aza manao <strong>unbounded loops</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                            <span>Aza mitahiry sensitive data on-chain</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                            <span>Aza mi-deploy mainnet tsy mbola notestena</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Testing sy Deployment Strategy</h3>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">1. Local Testing</h4>
+                    <p class="text-sm text-gray-600">Mampiasa Foundry na Hardhat mba hanao testing local aloha.</p>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-green-800 mb-2">2. Testnet Deployment</h4>
+                    <p class="text-sm text-gray-600">Deploy any amin'ny Goerli na Sepolia testnet mba hitsapa ny tena environment.</p>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <h4 class="font-semibold text-orange-800 mb-2">3. Security Audit</h4>
+                    <p class="text-sm text-gray-600">Manao audit miaraka amin'ny security experts alohan'ny mainnet.</p>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h4 class="font-semibold text-purple-800 mb-2">4. Mainnet Deployment</h4>
+                    <p class="text-sm text-gray-600">Deploy mainnet rehefa azo antoka fa tsara sy azo iantehirana ny contract.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2024-2025 Updates -->
+    <section id="updates-2024" class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">8. Vaovao 2024-2025</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Solidity 0.8.30 - Vaovao farany indrindra</h3>
+            <p class="mb-4">
+                Tamin'ny Mei 2025 dia navoaka ny <span class="highlight">Solidity 0.8.30</span> ho an'ny Ethereum Pectra upgrade. Ireto ny vaovao lehibe:
+            </p>
+
+            <div class="space-y-4 mb-6">
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">
+                        <i class="fas fa-rocket mr-2"></i>Pectra Network Upgrade Support
+                    </h4>
+                    <p class="text-sm">
+                        Ny Solidity 0.8.30 dia natao manokana ho an'ny Pectra upgrade izay niseho tamin'ny Mei 2025. Ity dia nampiditra endri-javatra vaovao maro amin'ny Ethereum.
+                    </p>
+                </div>
+
+                <div class="success-box rounded-lg p-4">
+                    <h4 class="font-semibold text-green-800 mb-2">
+                        <i class="fas fa-shield-alt mr-2"></i>Security Improvements
+                    </h4>
+                    <p class="text-sm">
+                        Nisy fanatsarana be dia be amin'ny security features sy error handling. Ny compiler dia mahatonga azy ireo mitaky fandikana mivaingana kokoa.
+                    </p>
+                </div>
+            </div>
+
+            <div class="code-block mb-4">
+                <pre><code>// Solidity 0.8.30 example
+pragma solidity ^0.8.30;
+
+contract Modern2024Contract {
+    // Vaovao: Custom errors with parameters
+    error InsufficientBalance(uint256 available, uint256 required);
+    error UnauthorizedAccess(address caller);
+    
+    mapping(address => uint256) private balances;
+    
+    function withdraw(uint256 amount) public {
+        uint256 balance = balances[msg.sender];
+        
+        // Using new custom error format
+        if (balance < amount) {
+            revert InsufficientBalance(balance, amount);
+        }
+        
+        balances[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Ethereum Pectra Upgrade - Mety hisy fiatraikany</h3>
+            <p class="mb-4">
+                Ny <span class="highlight">Pectra upgrade</span> dia nampiditra endri-javatra vaovao maro izay misy fiatraikany amin'ny smart contract development:
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-purple-600 mb-2">
+                        <i class="fas fa-user-cog mr-2"></i>Account Abstraction (EIP-7702)
+                    </h4>
+                    <p class="text-sm">
+                        Ankehitriny dia afaka manana "smart wallet" ny users tsotra. Izany dia midika fa ny EOA (Externally Owned Account) dia afaka manao delegation.
+                    </p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-600 mb-2">
+                        <i class="fas fa-database mr-2"></i>Improved Data Access
+                    </h4>
+                    <p class="text-sm">
+                        Ny smart contracts dia afaka miditra amin'ny block hash data taloha kokoa, manome fahafahana miasa amin'ny historical data.
+                    </p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-green-600 mb-2">
+                        <i class="fas fa-coins mr-2"></i>Staking Improvements
+                    </h4>
+                    <p class="text-sm">
+                        Nisy fanatsarana amin'ny validator staking mechanics izay mahatonga ny staking ho flexible kokoa.
+                    </p>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-orange-600 mb-2">
+                        <i class="fas fa-layer-group mr-2"></i>Layer 2 Optimizations
+                    </h4>
+                    <p class="text-sm">
+                        Fanatsarana ho an'ny rollup data efficiency izay mahatonga ny Layer 2 solutions ho mora kokoa.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Security Trends 2024</h3>
+            <p class="mb-4">
+                Araka ny <a href="https://blog.openzeppelin.com/web3-security-auditors-2024-rewind" class="text-blue-600 hover:underline">OpenZeppelin's 2024 Security Rewind</a>, ireto ny security issues lehibe indrindra tamin'ny 2024:
+            </p>
+
+            <div class="space-y-4">
+                <div class="warning-box rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800 mb-2">1. Access Control Issues</h4>
+                    <p class="text-sm">
+                        Mbola io ihany no olana lehibe indrindra - ny fahadisoana amin'ny famaritana hoe iza no afaka manao inona.
+                    </p>
+                </div>
+                
+                <div class="warning-box rounded-lg p-4">
+                    <h4 class="font-semibold text-orange-800 mb-2">2. Price Oracle Manipulation</h4>
+                    <p class="text-sm">
+                        DeFi protocols dia matetika iharan'ny fanafihana amin'ny alalan'ny price oracle manipulation.
+                    </p>
+                </div>
+                
+                <div class="warning-box rounded-lg p-4">
+                    <h4 class="font-semibold text-yellow-800 mb-2">3. Frontend/Backend Integration</h4>
+                    <p class="text-sm">
+                        Ny olana amin'ny fifandraisana amin'ny frontend sy smart contract dia nihamitombo tamin'ny 2024.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Vontoatin-kevitra ho an'ny 2025</h3>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="success-box rounded-lg p-4">
+                    <h4 class="font-semibold text-green-800 mb-3">
+                        <i class="fas fa-chart-line mr-2"></i>Tokony horesahina
+                    </h4>
+                    <ul class="text-sm space-y-1">
+                        <li>• Account Abstraction development</li>
+                        <li>• Layer 2 solution integration</li>
+                        <li>• Cross-chain interoperability</li>
+                        <li>• AI-powered smart contracts</li>
+                        <li>• Improved DeFi security patterns</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-800 mb-3">
+                        <i class="fas fa-tools mr-2"></i>Fitaovana vaovao
+                    </h4>
+                    <ul class="text-sm space-y-1">
+                        <li>• Foundry dia lasa popular kokoa</li>
+                        <li>• AI-assisted code review tools</li>
+                        <li>• Better testing frameworks</li>
+                        <li>• Automated security scanning</li>
+                        <li>• Enhanced debugging tools</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources & Conclusion -->
+    <section class="mb-12">
+        <div class="chapter-header">
+            <h2 class="text-3xl font-bold text-gray-800">9. Fanampiny sy Fianarana mitohy</h2>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Loharanom-baovao</h3>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-blue-800 mb-3">
+                        <i class="fas fa-book mr-2"></i>Documentation
+                    </h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://docs.soliditylang.org/" class="text-blue-600 hover:underline">Official Solidity Documentation</a></li>
+                        <li><a href="https://docs.openzeppelin.com/" class="text-blue-600 hover:underline">OpenZeppelin Contracts</a></li>
+                        <li><a href="https://hardhat.org/" class="text-blue-600 hover:underline">Hardhat Documentation</a></li>
+                        <li><a href="https://book.getfoundry.sh/" class="text-blue-600 hover:underline">Foundry Book</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-green-800 mb-3">
+                        <i class="fas fa-video mr-2"></i>Video Tutorials
+                    </h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.youtube.com/watch?v=jcgfQEbptdo" class="text-blue-600 hover:underline">Learn Blockchain & Solidity Full Course 2024</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=-1GB6m39-rM" class="text-blue-600 hover:underline">Cyfrin Solidity Course</a></li>
+                        <li>Patrick Collins - Smart Contract Development</li>
+                        <li>Dapp University - Blockchain tutorials</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Dingana manaraka</h3>
+            <p class="mb-4">
+                Rehefa nahavita ny fototra amin'ny Solidity ianao dia afaka mandroso any amin'ny lohahevitra advanced kokoa:
+            </p>
+
+            <div class="space-y-4">
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">ERC Standards</h4>
+                    <p class="text-sm text-gray-600">Mianara ny ERC-20 (tokens), ERC-721 (NFTs), ERC-1155 (multi-tokens)</p>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-green-800 mb-2">DeFi Protocols</h4>
+                    <p class="text-sm text-gray-600">Automated Market Makers (AMM), Lending Protocols, Yield Farming</p>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h4 class="font-semibold text-purple-800 mb-2">Layer 2 Solutions</h4>
+                    <p class="text-sm text-gray-600">Polygon, Arbitrum, Optimism - fomba fanaovana scaling</p>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <h4 class="font-semibold text-orange-800 mb-2">Cross-chain Development</h4>
+                    <p class="text-sm text-gray-600">Bridges, Multi-chain protocols, Interoperability</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-graduation-cap mr-2 text-blue-600"></i>Fehiny
+            </h3>
+            <p class="mb-4">
+                Ny Solidity dia fiteny fandaharana mahery vaika izay manokatra varavarana maro amin'ny blockchain development. Tsy misy fetra ny zavatra azo atao - avy amin'ny simple smart contracts ka hatramin'ny complex DeFi protocols.
+            </p>
+            <p class="mb-4">
+                Ny zavatra lehibe indrindra dia ny <strong>fanazaran-tena mitohy</strong>. Blockchain technology dia mivoatra hatrany, ka tsy maintsy mianaraka ny vaovao isika. Mampiasà ny community, mandehana any amin'ny hackathons, ary manoratra code isan'andro.
+            </p>
+            <div class="flex items-center justify-center mt-6">
+                <div class="text-center">
+                    <p class="font-semibold text-gray-800 mb-2">Mazotoa manoratra code! 🚀</p>
+                    <p class="text-sm text-gray-600">Ny hoavy dia ho an'ny blockchain developers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h3 class="text-xl font-semibold mb-4">Boky Fampianarana Solidity 2024-2025</h3>
+            <p class="text-gray-300 mb-4">
+                Boky ity dia natao mba hanampiana ny mpianatra vao manomboka hianatra Solidity sy smart contract development. 
+                Miaraka amin'ny vaovao farany indrindra amin'ny 2024-2025.
+            </p>
+            <div class="flex justify-center space-x-6 text-sm">
+                <span>📅 Nohavaozina: Desambra 2024</span>
+                <span>🔧 Version: Solidity 0.8.30</span>
+                <span>⛓️ Network: Ethereum Pectra</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Simple scroll spy for table of contents
+    document.addEventListener('DOMContentLoaded', function() {
+        const links = document.querySelectorAll('a[href^="#"]');
+        
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+
+    // Copy code functionality
+    document.querySelectorAll('.code-block').forEach(block => {
+        block.addEventListener('dblclick', function() {
+            const code = this.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Simple notification
+                const notification = document.createElement('div');
+                notification.textContent = 'Code copied!';
+                notification.style.cssText = 'position:fixed;top:20px;right:20px;background:#10b981;color:white;padding:10px;border-radius:5px;z-index:1000';
+                document.body.appendChild(notification);
+                setTimeout(() => document.body.removeChild(notification), 2000);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
