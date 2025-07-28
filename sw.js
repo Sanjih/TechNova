@@ -1,4 +1,4 @@
-const CACHE_NAME = 'technova-v1';
+const CACHE_NAME = 'technova-v2';
 const urlsToCache = [
   '/',                     // Page d'accueil
   '/index.html',
