@@ -8,7 +8,7 @@ const urlsToCache = [
   '/favicon.ico',
   '/assets/android-icon-192x192.png', // Corrected path based on manifest.json
   '/assets/apple-icon-180x180.png'    // Corrected path based on manifest.json
-  '/tutorials/Fampiasana AI amin'ny Méga 200 Ar.html',
+  '/TechNova/tutorials/Fampiasana AI amin'ny Méga 200 Ar.html',
   '/tutorials/tutoriel-ia.html',
 ];
 // Note: The manifest.json indicates asset paths without /TechNova/ prefix.
