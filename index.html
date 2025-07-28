@@ -127,8 +127,7 @@
     <div class="container mx-auto px-6">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Nos Tutoriels Tech</h2>
       <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Des modules interactifs pour comprendre et maîtriser les technologies de demain.</p>
- 
-     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
       <div class="tutorial-card bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm">
         <div class="card-img h-44 bg-gradient-to-br from-bleu to-blue-600 flex items-center justify-center text-6xl text-white">🚀</div>
         <div class="p-6">
@@ -140,8 +139,10 @@
             </div>
             <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-web3">0%</span></small>
           </div>
-    </div>
-    <button class="block w-full py-3 bg-bleu text-white text-center rounded-full font-semibold hover:bg-opacity-90 transition-opacity mt-4">Commencer</button>
+          <button onclick="completeTutorial('web3')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white">
+            Marquer comme terminé
+          </button>
+     
   </div>
 </a>
           </div>
