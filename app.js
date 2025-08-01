@@ -44,6 +44,37 @@ function setupTheme() {
   });
 }
 
+// ----------------------------------------------------
+    // NOUVEAU CODE POUR LA REDIRECTION DES TUTORIELS
+    // ----------------------------------------------------
+    const tutorialLinks = document.querySelectorAll('.tutorial-link');
+
+    tutorialLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche la navigation par défaut
+
+            // C'est ici que vous devez vérifier l'état de l'utilisateur.
+            // Par défaut, nous utilisons un exemple basé sur localStorage.
+            const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'true'; 
+
+            if (userIsLoggedIn) {
+                // Si connecté, on redirige vers le tutoriel
+                const tutorialPath = link.getAttribute('data-tutorial');
+                if (tutorialPath) {
+                    window.location.href = tutorialPath;
+                }
+            } else {
+                // Si déconnecté, on affiche la fenêtre modale de connexion
+                openModal();
+            }
+        });
+    });
+
+    // ----------------------------------------------------
+    // FIN DU NOUVEAU CODE
+    // ----------------------------------------------------
+
+
 function updateUserUI() {
   const userMenu = document.getElementById('userMenu');
   const authBtn = document.getElementById('authBtn');
