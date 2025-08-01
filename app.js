@@ -267,3 +267,37 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW registration failed: ', err));
   });
 }
+// app.js
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Gestionnaire pour les liens des tutoriels
+    const tutorialLinks = document.querySelectorAll('.tutorial-link');
+
+    tutorialLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche la navigation par défaut
+
+            // Ici, vous devez avoir une logique pour vérifier si l'utilisateur est connecté.
+            // Pour l'instant, nous allons utiliser une variable fictive.
+            const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'true'; // Exemple avec localStorage
+
+            if (userIsLoggedIn) {
+                // Si l'utilisateur est connecté, on le redirige vers le tutoriel
+                const tutorialPath = link.getAttribute('data-tutorial');
+                window.location.href = tutorialPath;
+            } else {
+                // Si l'utilisateur n'est PAS connecté, on affiche le modal de connexion
+                openModal(); // Appel de votre fonction openModal()
+            }
+        });
+    });
+
+    // ... Reste de votre code (gestion du thème, etc.) ...
+});
+
+// Assurez-vous que la fonction openModal est bien définie et accessible
+// par exemple, en dehors de la fonction DOMContentLoaded si elle est globale.
+// function openModal() {
+//   const modal = document.getElementById('loginModal');
+//   modal.classList.remove('hidden');
+// }
