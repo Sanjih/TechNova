@@ -7,8 +7,31 @@
   <meta name="description" content="Apprenez la technologie et l'innovation – avec suivi de progression et compte utilisateur.">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script type="module">
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPku1EYueSwaG3QcKu8Od1BVuFLPVsCMg",
+    authDomain: "sahanova-7747e.firebaseapp.com",
+    projectId: "sahanova-7747e",
+    storageBucket: "sahanova-7747e.firebasestorage.app",
+    messagingSenderId: "436444843701",
+    appId: "1:436444843701:web:88b657ee0101be9d4e38fc"
+  };
+
+  // Initialiser Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Exporter la configuration pour qu'elle soit accessible dans app.js
+  export const auth = firebase.auth();
+</script>
+
+<script type="module" src="js/app.js"></script>
+
 
   <!-- Manifest PWA -->
   <link rel="manifest" href="../manifest.json">
