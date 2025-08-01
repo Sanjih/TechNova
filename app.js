@@ -74,6 +74,91 @@ function setupTheme() {
     // FIN DU NOUVEAU CODE
     // ----------------------------------------------------
 
+ // ----------------------------------------------------
+    // NOUVEAU CODE POUR L'AUTHENTIFICATION AVEC FIREBASE
+    // ----------------------------------------------------
+
+    // Logique pour l'inscription
+    const signupForm = document.getElementById('signup-form');
+    if (signupForm) {
+      signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = signupForm.querySelector('#signup-email').value;
+        const password = signupForm.querySelector('#signup-password').value;
+      
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then((cred) => {
+            console.log('Utilisateur inscrit :', cred.user);
+            closeModal();
+            localStorage.setItem('userLoggedIn', 'true');
+            window.location.reload(); // Recharger pour mettre à jour l'UI
+          })
+          .catch((err) => {
+            console.log('Erreur d\'inscription :', err.message);
+            // Ici, vous pouvez afficher un message d'erreur dans votre UI
+          });
+      });
+    }
+
+    // Logique pour la connexion
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = loginForm.querySelector('#login-email').value;
+        const password = loginForm.querySelector('#login-password').value;
+      
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then((cred) => {
+            console.log('Utilisateur connecté :', cred.user);
+            closeModal();
+            localStorage.setItem('userLoggedIn', 'true');
+            window.location.reload(); // Recharger pour mettre à jour l'UI
+          })
+          .catch((err) => {
+            console.log('Erreur de connexion :', err.message);
+            // Ici, vous pouvez afficher un message d'erreur dans votre UI
+          });
+      });
+    }
+
+    // Gestion de la déconnexion
+    const logoutBtn = document.getElementById('logoutBtn'); // Assurez-vous d'avoir un bouton avec cet ID
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        firebase.auth().signOut().then(() => {
+          console.log('Déconnexion réussie');
+          localStorage.setItem('userLoggedIn', 'false');
+          window.location.reload(); // Recharger pour mettre à jour l'UI
+        }).catch((error) => {
+          console.log('Erreur de déconnexion :', error.message);
+        });
+      });
+    }
+
+    // Gestion du changement d'état de l'utilisateur (connexion/déconnexion)
+    firebase.auth().onAuthStateChanged((user) => {
+      const authBtn = document.getElementById('authBtn');
+      const userMenu = document.getElementById('userMenu');
+
+      if (user) {
+        // Utilisateur connecté
+        if (authBtn) authBtn.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'flex';
+        // Mettre à jour les informations utilisateur (nom, niveau, etc.) si vous les stockez.
+        // Exemple : document.getElementById('userName').textContent = user.email;
+        localStorage.setItem('userLoggedIn', 'true');
+      } else {
+        // Utilisateur déconnecté
+        if (authBtn) authBtn.style.display = 'block';
+        if (userMenu) userMenu.style.display = 'none';
+        localStorage.setItem('userLoggedIn', 'false');
+      }
+    });
+
+    // ----------------------------------------------------
+    // FIN DU NOUVEAU CODE
+    //
 
 function updateUserUI() {
   const userMenu = document.getElementById('userMenu');
