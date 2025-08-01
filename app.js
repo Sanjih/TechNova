@@ -55,7 +55,7 @@ function setupTheme() {
 
             // C'est ici que vous devez vérifier l'état de l'utilisateur.
             // Par défaut, nous utilisons un exemple basé sur localStorage.
-            const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'true'; 
+            const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'false'; 
 
             if (userIsLoggedIn) {
                 // Si connecté, on redirige vers le tutoriel
