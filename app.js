@@ -2,8 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Variables globales
-    const loginModal = document.getElementById('authModal');
-    const registerModal = document.getElementById('registerModal');
+    const loginModal = document.getElementById('loginModal'); // Corrigé pour correspondre à l'ID de votre HTML
     const authBtn = document.getElementById('authBtn');
     const navAuthBtn = document.getElementById('navAuthBtn');
     const userMenu = document.getElementById('userMenu');
@@ -14,37 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loginModal) {
             loginModal.classList.remove('hidden');
         }
-        if (registerModal) {
-            registerModal.classList.add('hidden');
-        }
-    };
-
-    window.openRegisterModal = () => {
-        if (registerModal) {
-            registerModal.classList.remove('hidden');
-        }
-        if (loginModal) {
-            loginModal.classList.add('hidden');
-        }
     };
 
     window.closeModal = () => {
         if (loginModal) {
             loginModal.classList.add('hidden');
         }
-        if (registerModal) {
-            registerModal.classList.add('hidden');
-        }
     };
     
+    // Fonction de compatibilité pour les boutons qui appellent openModal()
+    window.openModal = window.openLoginModal;
+
     // Rendre les fonctions d'ouverture de modal accessibles au HTML
     window.showLogin = openLoginModal;
     window.showRegister = openRegisterModal;
-
-    // Gestionnaire de clic pour les boutons de fermeture
-    document.querySelectorAll('.modal-content button[onclick*="closeModal()"]').forEach(btn => {
-        btn.addEventListener('click', closeModal);
-    });
 
     // Fonctions d'authentification (à lier à Firebase)
     window.login = () => {
@@ -122,4 +104,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedTheme === 'dark') {
       document.body.classList.add('dark');
     }
+
+    // Écouteur d'événement pour tous les liens de tutoriels
+    const tutorialLinks = document.querySelectorAll('.tutorial-link');
+    tutorialLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            if (!userIsLoggedIn) {
+                event.preventDefault(); 
+                openLoginModal();
+            } else {
+                // Rediriger si l'utilisateur est connecté
+                const tutorialPath = link.getAttribute('data-tutorial');
+                if (tutorialPath) {
+                    window.location.href = tutorialPath;
+                }
+            }
+        });
+    });
+
 });
