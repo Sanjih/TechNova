@@ -276,3 +276,22 @@ if ('serviceWorker' in navigator) {
 
 // === Lancer l'app ===
 document.addEventListener('DOMContentLoaded', init);
+
+// === GESTION DE LA REDIRECTION DES TUTORIELS ===
+const tutorialLinks = document.querySelectorAll('.tutorial-link');
+tutorialLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+        const userIsLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        if (!userIsLoggedIn) {
+            event.preventDefault(); // Empêche le défilement
+            openLoginModal();
+        } else {
+            // Rediriger si l'utilisateur est connecté
+            const tutorialPath = link.getAttribute('data-tutorial');
+            if (tutorialPath) {
+                window.location.href = tutorialPath;
+            }
+        }
+    });
+});
+
