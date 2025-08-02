@@ -168,6 +168,7 @@ function openModalIfGuest(callback) {
 
 // === Écouteurs d'événements principaux ===
 function setupEventListeners() {
+    // Événements des boutons d'authentification
     const authBtn = document.getElementById('authBtn');
     const navAuthBtn = document.getElementById('navAuthBtn');
     const showRegisterLink = document.getElementById('showRegisterLink');
@@ -192,22 +193,49 @@ function setupEventListeners() {
     const tutorialLinks = document.querySelectorAll('.tutorial-link');
     tutorialLinks.forEach(link => {
         link.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche TOUJOURS le comportement par défaut
+
             if (!currentUser) {
-                event.preventDefault();
                 openModal();
             } else {
                 const tutorialPath = link.getAttribute('href');
-                if (tutorialPath) {
+                if (tutorialPath && tutorialPath !== '#') {
                     window.location.href = tutorialPath;
                 }
             }
         });
     });
 
+    // Événements pour les boutons d'exploration
     const heroExploreBtn = document.getElementById('heroExploreBtn');
     const aboutExploreBtn = document.getElementById('aboutExploreBtn');
     if (heroExploreBtn) heroExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
     if (aboutExploreBtn) aboutExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
+    
+    // Gestionnaire pour le slider
+    const slider = document.querySelector('.slider');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    const cardWidth = 320 + 24; // w-80 + gap-6
+    let index = 0;
+
+    if (nextBtn && slider) {
+        nextBtn.addEventListener('click', () => {
+            if (index < 1) {
+                index++;
+                slider.style.transform = `translateX(-${index * cardWidth}px)`;
+            }
+        });
+    }
+
+    if (prevBtn && slider) {
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) {
+                index--;
+                slider.style.transform = `translateX(-${index * cardWidth}px)`;
+            }
+        });
+    });
 }
 
 // === Loader d'entrée ===
