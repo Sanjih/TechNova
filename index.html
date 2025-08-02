@@ -6,40 +6,17 @@
   <title>SaHanova</title>
   <meta name="description" content="Apprenez la technologie et l'innovation – avec suivi de progression et compte utilisateur.">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 
   <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<script type="module">
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPku1EYueSwaG3QcKu8Od1BVuFLPVsCMg",
-    authDomain: "sahanova-7747e.firebaseapp.com",
-    projectId: "sahanova-7747e",
-    storageBucket: "sahanova-7747e.firebasestorage.app",
-    messagingSenderId: "436444843701",
-    appId: "1:436444843701:web:88b657ee0101be9d4e38fc"
-  };
-
-  // Initialiser Firebase
-  firebase.initializeApp(firebaseConfig);
-
-  // Exporter la configuration pour qu'elle soit accessible dans app.js
-  export const auth = firebase.auth();
-</script>
-
-<script type="module" src="js/app.js"></script>
-
-
-  <!-- Manifest PWA -->
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="#0077ff">
 </head>
 <body class="bg-gray-50 text-noir min-h-screen">
 
-  <!-- Loader -->
   <div id="loader" class="fixed inset-0 bg-noir flex items-center justify-center z-50">
     <div class="text-center">
       <div class="text-fluorescent text-6xl mb-4">🚀</div>
@@ -48,44 +25,37 @@
     </div>
   </div>
 
-  <!-- Modals -->
-  <div id="loginModal" class="fixed inset-0 hidden z-50 overflow-auto bg-black bg-opacity-50">
-    <div class="modal-content relative p-8 bg-white max-w-sm m-auto flex-col rounded-xl shadow-lg">
-        <div class="flex justify-between items-center mb-6">
-            <h3 id="modalTitle" class="text-2xl font-bold">Connexion</h3>
-            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
-        </div>
-
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label for="login-email" class="block mb-1 font-medium">Email</label>
-                <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-full" placeholder="email@exemple.com" required>
-            </div>
-            <div>
-                <label for="login-password" class="block mb-1 font-medium">Mot de passe</label>
-                <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-full" placeholder="********" required>
-            </div>
-            <button type="submit" class="w-full py-3 bg-bleu text-white rounded-full font-semibold hover:bg-blue-600 transition">Se connecter</button>
-            <p class="text-center text-sm text-gray-500">Pas encore inscrit ? <a href="#" id="showSignupLink" class="text-bleu hover:underline">S'inscrire</a></p>
-        </form>
-
-        <form id="signup-form" class="space-y-4 hidden">
-            <div>
-                <label for="signup-email" class="block mb-1 font-medium">Email</label>
-                <input type="email" id="signup-email" class="w-full px-4 py-2 border rounded-full" placeholder="email@exemple.com" required>
-            </div>
-            <div>
-                <label for="signup-password" class="block mb-1 font-medium">Mot de passe</label>
-                <input type="password" id="signup-password" class="w-full px-4 py-2 border rounded-full" placeholder="********" required>
-            </div>
-            <button type="submit" class="w-full py-3 bg-bleu text-white rounded-full font-semibold hover:bg-blue-600 transition">S'inscrire</button>
-            <p class="text-center text-sm text-gray-500">Déjà un compte ? <a href="#" id="showLoginLink" class="text-bleu hover:underline">Se connecter</a></p>
-        </form>
-
+  <div id="loginModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold">Connexion</h3>
+        <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+      </div>
+      <div class="space-y-5">
+        <input type="email" id="loginEmail" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="password" id="loginPassword" placeholder="Mot de passe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <button id="loginBtn" class="w-full py-3 bg-bleu text-white rounded-lg font-semibold hover:bg-blue-600 transition">Se connecter</button>
+        <p class="text-center text-sm text-gray-500">Pas encore inscrit ? <a href="#" id="showRegisterLink" class="text-bleu hover:underline">S'inscrire</a></p>
+      </div>
     </div>
-</div>
+  </div>
 
-  <!-- Header -->
+  <div id="registerModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold">Inscription</h3>
+        <button id="closeRegisterBtn" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+      </div>
+      <div class="space-y-5">
+        <input type="text" id="regName" placeholder="Nom complet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="email" id="regEmail" placeholder="Email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <input type="password" id="regPassword" placeholder="Mot de passe" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bleu focus:outline-none"/>
+        <button id="registerBtn" class="w-full py-3 bg-fluorescent text-noir font-semibold rounded-lg hover:bg-green-300 transition">S'inscrire</button>
+        <p class="text-center text-sm text-gray-500"><a href="#" id="showLoginLink" class="text-bleu hover:underline">Déjà un compte ? Se connecter</a></p>
+      </div>
+    </div>
+  </div>
+
   <header class="fixed w-full bg-white/95 backdrop-blur-md z-50 shadow-sm">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-bleu">
@@ -100,23 +70,22 @@
         <div class="w-9 h-9 rounded-full bg-bleu text-white flex items-center justify-center font-bold">
           <span id="userInitial">U</span>
         </div>
-        <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500">Déconnexion</button>
+        <button id="logoutBtn" class="text-sm text-gray-500 hover:text-red-500">Déconnexion</button>
       </div>
 
-      <button id="authBtn" class="md:hidden block text-sm text-bleu" onclick="openModal()">Connexion</button>
+      <button id="authBtn" class="md:hidden block text-sm text-bleu">Connexion</button>
       <nav id="navLinks" class="hidden md:flex space-x-8">
         <a href="#home" class="font-medium group">Accueil</a>
         <a href="#about" class="font-medium group">À propos</a>
         <a href="#tutorials" class="font-medium group">Tutoriels</a>
         <a href="#blog" class="font-medium group">Blog</a>
         <a href="#contact" class="font-medium group">Contact</a>
-        <button id="navAuthBtn" class="font-medium text-bleu" onclick="openModal()">Connexion</button>
+        <button id="navAuthBtn" class="font-medium text-bleu">Connexion</button>
         <button id="themeToggle" class="ml-4 text-sm text-gray-500">🌙</button>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
   <section id="home" class="pt-40 pb-20 text-center bg-gradient-to-br from-white to-blue-50">
     <div class="container mx-auto px-6">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
@@ -125,13 +94,12 @@
       <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
         Découvrez les dernières avancées technologiques, du Web3 à l’IA, en passant par la robotique et la réalité augmentée. Apprenez, créez, transformez.
       </p>
-      <button onclick="openModalIfGuest(() => window.location='#tutorials')" class="btn-fluo px-8 py-4 rounded-full font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-xl">
+      <button id="heroExploreBtn" class="btn-fluo px-8 py-4 rounded-full font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-xl">
         Explorer les tutoriels
       </button>
     </div>
   </section>
 
-  <!-- À Propos -->
   <section id="about" class="py-20 bg-white">
     <div class="container mx-auto px-6">
       <div class="flex flex-col lg:flex-row items-center gap-12">
@@ -142,7 +110,7 @@
           <h2 class="text-3xl md:text-4xl font-bold mb-6 text-bleu">Pourquoi la tech change tout</h2>
           <p class="text-gray-600 mb-4">Chaque jour, de nouvelles technologies redéfinissent la manière dont nous vivons, travaillons et interagissons.</p>
           <p class="text-gray-600 mb-6">Nos tutoriels sont conçus pour être clairs, progressifs et accessibles à tous.</p>
-          <button onclick="openModalIfGuest(() => window.location='#tutorials')" class="btn px-7 py-3 bg-bleu text-white rounded-full font-semibold transition hover:shadow-lg">
+          <button id="aboutExploreBtn" class="btn px-7 py-3 bg-bleu text-white rounded-full font-semibold transition hover:shadow-lg">
             Voir les tutoriels
           </button>
         </div>
@@ -150,32 +118,31 @@
     </div>
   </section>
 
-  <!-- Tutoriels -->
- <section id="tutorials" class="py-20 bg-gradient-to-br from-blue-50 to-pink-50">
+  <section id="tutorials" class="py-20 bg-gradient-to-br from-blue-50 to-pink-50">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Nos Tutoriels Tech</h2>
       <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Des modules interactifs pour comprendre et maîtriser les technologies de demain.</p>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
         
-        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/introduction-web3.html">
-    <div class="card-img h-44 bg-gradient-to-br from-bleu to-blue-600 flex items-center justify-center text-6xl text-white">🚀</div>
-    <div class="p-6">
-        <h3 class="text-xl font-bold mb-2">Introduction au Web3</h3>
-        <p class="text-gray-600 mb-4">Blockchain, NFTs, DAOs – découvrez l’internet décentralisé.</p>
-        <div class="mb-3">
-            <div class="w-full bg-gray-200 rounded-full h-2">
+        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/introduction-web3.html" data-tutorial-id="web3">
+          <div class="card-img h-44 bg-gradient-to-br from-bleu to-blue-600 flex items-center justify-center text-6xl text-white">🚀</div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Introduction au Web3</h3>
+            <p class="text-gray-600 mb-4">Blockchain, NFTs, DAOs – découvrez l’internet décentralisé.</p>
+            <div class="mb-3">
+              <div class="w-full bg-gray-200 rounded-full h-2">
                 <div id="progress-web3" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+              </div>
+              <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-web3">0%</span></small>
             </div>
-            <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-web3">0%</span></small>
-        </div>
-        <div class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4 text-center">
-            Hijery
-        </div>
-    </div>
-</a>
+            <button class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
+              Hijery
+            </button>
+          </div>
+        </a>
 
-        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Fampiasana AI amin'ny Méga 200 Ar.html">
+        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Fampiasana AI amin'ny Méga 200 Ar.html" data-tutorial-id="mega-ai">
           <div class="card-img h-44 bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-6xl text-white">💡</div>
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2">Fampiasana AI amin'ny Mega sarany ambany</h3>
@@ -186,13 +153,13 @@
               </div>
               <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-mega-ai">0%</span></small>
             </div>
-            <button onclick="event.preventDefault(); completeTutorial('mega-ai')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
+            <button class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
               Hijery
             </button>
           </div>
         </a>
 
-        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/tutoriel-ia.html">
+        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/tutoriel-ia.html" data-tutorial-id="ia">
           <div class="card-img h-44 bg-gradient-to-br from-purple-500 to-bleu flex items-center justify-center text-6xl text-white">🧠</div>
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2">IA Générative</h3>
@@ -203,45 +170,43 @@
               </div>
               <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-ia">0%</span></small>
             </div>
-            <button onclick="event.preventDefault(); completeTutorial('ia')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
+            <button class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
               Hijery
             </button>
           </div>
         </a>
 
-        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Rafitra Digital.html">
+        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Rafitra Digital.html" data-tutorial-id="digital">
           <div class="card-img h-44 bg-gradient-to-br from-green-500 to-bleu flex items-center justify-center text-6xl text-white">🧠</div>
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2">Rafitra Digital</h3>
             <p class="text-gray-600 mb-4">Antony sy fitaovana.</p>
-            <button onclick="event.preventDefault(); completeTutorial('digital')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
+            <button class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
               Hijery
             </button>
           </div>
         </a>
 
-        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Tsy tokny izy no hibaiko antsika.html">
+        <a href="#" class="tutorial-link bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-3 transition w-full max-w-sm block" data-tutorial="tutorials/Tsy tokny izy no hibaiko antsika.html" data-tutorial-id="ia2">
           <div class="card-img h-44 bg-gradient-to-br from-purple-500 to-bleu flex items-center justify-center text-6xl text-white">🧠</div>
           <div class="p-6">
             <h3 class="text-xl font-bold mb-2">IA Générative</h3>
             <p class="text-gray-600 mb-4">Créez du texte, des images et de la musique avec l’IA.</p>
             <div class="mb-3">
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div id="progress-ia" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+                <div id="progress-ia2" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
               </div>
-              <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-ia">0%</span></small>
+              <small class="text-gray-500 mt-1 block">Progression: <span id="progress-text-ia2">0%</span></small>
             </div>
-            <button onclick="event.preventDefault(); completeTutorial('ia')" class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
-             Hijery
+            <button class="btn-outline px-5 py-2 rounded-full border-2 border-bleu font-semibold transition hover:bg-bleu hover:text-white mt-4">
+              Hijery
             </button>
           </div>
         </a>
-
       </div>
-      </div>
+    </div>
   </section>
 
-  <!-- Blog -->
   <section id="blog" class="py-20 bg-white">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Actualités & Articles</h2>
@@ -259,7 +224,6 @@
     </div>
   </section>
 
-  <!-- Contact -->
   <section id="contact" class="py-20 bg-noir text-white">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Prêt à innover ?</h2>
@@ -275,16 +239,12 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="bg-noir text-white py-16">
     <div class="container mx-auto px-6 text-center text-gray-400">
       &copy; 2025 TechNova. Tous droits réservés.
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="../js/app.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
-
