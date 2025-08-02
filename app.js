@@ -275,7 +275,7 @@ function setupEventListeners() {
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
     if (closeRegisterBtn) closeRegisterBtn.addEventListener('click', closeRegister);
     
-    // GESTION DES CLICS SUR LES TUTORIELS (Logique corrigée)
+// GESTION DES CLICS SUR LES TUTORIELS (Logique corrigée)
     const tutorialLinks = document.querySelectorAll('.tutorial-link');
     tutorialLinks.forEach(link => {
         link.addEventListener('click', (event) => {
@@ -344,3 +344,4 @@ if ('serviceWorker' in navigator) {
 
 // === Lancer l'app ===
 document.addEventListener('DOMContentLoaded', init);
+
