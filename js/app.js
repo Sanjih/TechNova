@@ -16,6 +16,7 @@ function loadUser() {
     if (saved) {
         currentUser = JSON.parse(saved);
     } else {
+        // Initialiser un utilisateur vide
         currentUser = null;
     }
 }
@@ -61,10 +62,24 @@ function updateUserUI() {
         if (userMenu) userMenu.classList.remove('hidden');
         if (authBtn) authBtn.classList.add('hidden');
         if (navAuthBtn) navAuthBtn.classList.add('hidden');
+
+        updateProgressBars();
     } else {
         if (userMenu) userMenu.classList.add('hidden');
         if (authBtn) authBtn.classList.remove('hidden');
         if (navAuthBtn) navAuthBtn.classList.remove('hidden');
+    }
+}
+
+// === Barres de progression ===
+function updateProgressBars() {
+    if (currentUser && currentUser.tutorials) {
+        for (const [key, progress] of Object.entries(currentUser.tutorials)) {
+            const bar = document.getElementById(`progress-${key}`);
+            const text = document.getElementById(`progress-text-${key}`);
+            if (bar) bar.style.width = progress + '%';
+            if (text) text.textContent = progress + '%';
+        }
     }
 }
 
@@ -79,6 +94,7 @@ function register() {
         return;
     }
 
+    // Vérifier si l'email existe déjà
     const existing = localStorage.getItem('techNovaUser');
     if (existing) {
         const user = JSON.parse(existing);
@@ -88,13 +104,16 @@ function register() {
         }
     }
 
+    // Créer un nouvel utilisateur
     currentUser = {
         name,
         email,
         password,
         level: 1,
-        xp: 0
+        xp: 0,
+        tutorials: { "mega-ai": 0, "ia": 0 }
     };
+
     saveUser();
     closeRegister();
     updateUserUI();
@@ -104,8 +123,8 @@ function register() {
 function login() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    const saved = localStorage.getItem('techNovaUser');
 
+    const saved = localStorage.getItem('techNovaUser');
     if (saved) {
         const user = JSON.parse(saved);
         if (user.email === email && user.password === password) {
@@ -166,52 +185,69 @@ function openModalIfGuest(callback) {
     }
 }
 
-// === Écouteurs d'événements principaux ===
+// === Compléter un tutoriel + certificat PDF ===
+function completeTutorial(id) {
+    if (!currentUser) return openModal();
+
+    if (currentUser.tutorials[id] < 100) {
+        currentUser.tutorials[id] = 100;
+        currentUser.xp += 50;
+
+        // Level up
+        if (currentUser.xp >= 100 * currentUser.level) {
+            currentUser.level++;
+            alert(`🎉 Félicitations ! Vous êtes passé au niveau ${currentUser.level} !`);
+        }
+
+        saveUser();
+        updateProgressBars();
+
+        // Générer certificat
+        const moduleName = id === 'mega-ai' ? 'AI et Méga' : id === 'ia' ? 'IA Générative' : id;
+        if (typeof html2pdf !== 'undefined') {
+            generateCertificate(moduleName);
+        } else {
+            console.warn('html2pdf n\'est pas chargé. Impossible de générer le certificat.');
+        }
+        alert(`Tutoriel "${moduleName}" terminé ! +50 XP`);
+    }
+}
+
+function generateCertificate(moduleName) {
+    const certHTML = `
+      <div style="
+        font-family: 'Orbitron', sans-serif;
+        text-align: center;
+        padding: 50px;
+        background: linear-gradient(135deg, #000000, #1e293b);
+        color: white;
+        border: 15px solid #a2ff00;
+        border-radius: 20px;
+        max-width: 800px;
+        margin: 20px auto;
+      ">
+        <h1 style="font-size: 3rem; color: #a2ff00;">Certificat de Réussite</h1>
+        <p style="font-size: 1.2rem; margin: 20px 0;">Délivré à</p>
+        <h2 style="font-size: 2.5rem; margin: 10px 0;">${currentUser.name}</h2>
+        <p style="font-size: 1.3rem;">Pour avoir terminé le tutoriel :</p>
+        <h3 style="font-size: 2rem; color: #0077ff; margin: 20px 0;">${moduleName}</h3>
+        <p style="margin-top: 30px; font-size: 1rem; opacity: 0.8;">TechNova • ${new Date().toLocaleDateString()}</p>
+      </div>
+    `;
+
+    const opt = {
+        margin: 1,
+        filename: `certificat-${moduleName}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'landscape' }
+    };
+    html2pdf().from(certHTML).set(opt).save();
+}
+
+// === Slider Tutoriels ===
 function setupEventListeners() {
-    // Événements des boutons d'authentification
-    const authBtn = document.getElementById('authBtn');
-    const navAuthBtn = document.getElementById('navAuthBtn');
-    const showRegisterLink = document.getElementById('showRegisterLink');
-    const showLoginLink = document.getElementById('showLoginLink');
-    const loginBtn = document.getElementById('loginBtn');
-    const registerBtn = document.getElementById('registerBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const closeRegisterBtn = document.getElementById('closeRegisterBtn');
-
-    if (authBtn) authBtn.addEventListener('click', openModal);
-    if (navAuthBtn) navAuthBtn.addEventListener('click', openModal);
-    if (showRegisterLink) showRegisterLink.addEventListener('click', showRegister);
-    if (showLoginLink) showLoginLink.addEventListener('click', showLogin);
-    if (loginBtn) loginBtn.addEventListener('click', login);
-    if (registerBtn) registerBtn.addEventListener('click', register);
-    if (logoutBtn) logoutBtn.addEventListener('click', logout);
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    if (closeRegisterBtn) closeRegisterBtn.addEventListener('click', closeRegister);
-    
-    // GESTION DES CLICS SUR LES TUTORIELS
-    const tutorialLinks = document.querySelectorAll('.tutorial-link');
-    tutorialLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            if (!currentUser) {
-                event.preventDefault();
-                openModal();
-            } else {
-                const tutorialPath = link.getAttribute('data-tutorial');
-                if (tutorialPath) {
-                    window.location.href = tutorialPath;
-                }
-            }
-        });
-    });
-
-    // Événements pour les boutons d'exploration
-    const heroExploreBtn = document.getElementById('heroExploreBtn');
-    const aboutExploreBtn = document.getElementById('aboutExploreBtn');
-    if (heroExploreBtn) heroExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
-    if (aboutExploreBtn) aboutExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
-    
-    // Gestionnaire pour le slider
+    // Boutons de navigation du slider
     const slider = document.querySelector('.slider');
     const prevBtn = document.querySelector('.prev');
     const nextBtn = document.querySelector('.next');
@@ -234,7 +270,60 @@ function setupEventListeners() {
                 slider.style.transform = `translateX(-${index * cardWidth}px)`;
             }
         });
+    }
+
+    // GESTION DES CLICS SUR LES TUTORIELS
+    const tutorialLinks = document.querySelectorAll('.tutorial-link');
+    tutorialLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            // Vérifier si le clic a eu lieu sur le bouton de complétion
+            if (event.target.classList.contains('btn-outline')) {
+                event.preventDefault();
+                const tutorialId = link.getAttribute('data-tutorial-id');
+                completeTutorial(tutorialId);
+                return; // Empêche la redirection
+            }
+
+            // Si l'utilisateur n'est pas connecté, ouvrir la modale
+            if (!currentUser) {
+                event.preventDefault(); // Empêche le défilement
+                openModal();
+            } else {
+                // Sinon, rediriger vers le tutoriel
+                const tutorialPath = link.getAttribute('data-tutorial');
+                if (tutorialPath) {
+                    window.location.href = tutorialPath;
+                }
+            }
+        });
     });
+
+    // Événements pour les boutons d'exploration
+    const heroExploreBtn = document.getElementById('heroExploreBtn');
+    const aboutExploreBtn = document.getElementById('aboutExploreBtn');
+    if (heroExploreBtn) heroExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
+    if (aboutExploreBtn) aboutExploreBtn.addEventListener('click', () => openModalIfGuest(() => window.location.href = '#tutorials'));
+
+    // Événements des boutons d'authentification
+    const authBtn = document.getElementById('authBtn');
+    const navAuthBtn = document.getElementById('navAuthBtn');
+    const showRegisterLink = document.getElementById('showRegisterLink');
+    const showLoginLink = document.getElementById('showLoginLink');
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const closeRegisterBtn = document.getElementById('closeRegisterBtn');
+
+    if (authBtn) authBtn.addEventListener('click', openModal);
+    if (navAuthBtn) navAuthBtn.addEventListener('click', openModal);
+    if (showRegisterLink) showRegisterLink.addEventListener('click', showRegister);
+    if (showLoginLink) showLoginLink.addEventListener('click', showLogin);
+    if (loginBtn) loginBtn.addEventListener('click', login);
+    if (registerBtn) registerBtn.addEventListener('click', register);
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if (closeRegisterBtn) closeRegisterBtn.addEventListener('click', closeRegister);
 }
 
 // === Loader d'entrée ===
