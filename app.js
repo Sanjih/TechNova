@@ -147,13 +147,13 @@ function logout() {
 
 // === Modals ===
 function openModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) loginModal.classList.remove('hidden');
+    const authModal = document.getElementById('authModal');
+    if (authModal) authModal.classList.remove('hidden');
 }
 
 function closeModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) loginModal.classList.add('hidden');
+    const authModal = document.getElementById('authModal');
+    if (authModal) authModal.classList.add('hidden');
 }
 
 function showRegister() {
@@ -201,7 +201,6 @@ function completeTutorial(id) {
         updateProgressBars();
         
         const moduleName = id === 'web3' ? 'Web3' : id === 'ia' ? 'IA Générative' : id;
-        // La génération de certificat nécessite la librairie html2pdf
         if (typeof html2pdf !== 'undefined') {
             generateCertificate(moduleName);
         } else {
@@ -211,7 +210,6 @@ function completeTutorial(id) {
     }
 }
 
-// La fonction generateCertificate est inchangée
 function generateCertificate(moduleName) {
     const certHTML = `
       <div style="
@@ -281,16 +279,24 @@ function setupEventListeners() {
     const tutorialLinks = document.querySelectorAll('.tutorial-link');
     tutorialLinks.forEach(link => {
         link.addEventListener('click', (event) => {
-            if (currentUser) {
-                // L'utilisateur est connecté, rediriger
+            // Vérifier si le clic a eu lieu sur le bouton de complétion
+            if (event.target.classList.contains('btn-outline')) {
+                event.preventDefault();
+                const tutorialId = link.getAttribute('data-tutorial-id');
+                completeTutorial(tutorialId);
+                return; // Empêche la redirection
+            }
+
+            // Si l'utilisateur n'est pas connecté, ouvrir la modale
+            if (!currentUser) {
+                event.preventDefault(); // Empêche le défilement
+                openModal();
+            } else {
+                // Sinon, rediriger vers le tutoriel
                 const tutorialPath = link.getAttribute('data-tutorial');
                 if (tutorialPath) {
                     window.location.href = tutorialPath;
                 }
-            } else {
-                // L'utilisateur n'est pas connecté, ouvrir la modale
-                event.preventDefault(); // Empêche le défilement
-                openModal();
             }
         });
     });
