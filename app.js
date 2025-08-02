@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
     });
 
-    // === GESTION DE LA REDIRECTION DES TUTORIELS ===
+// === GESTION DE LA REDIRECTION DES TUTORIELS ===
     const tutorialLinks = document.querySelectorAll('.tutorial-link');
     tutorialLinks.forEach(link => {
         link.addEventListener('click', (event) => {
@@ -149,3 +149,4 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userMenu) userMenu.classList.add('hidden');
     }
 });
+
